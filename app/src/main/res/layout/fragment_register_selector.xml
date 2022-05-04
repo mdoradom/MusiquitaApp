@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterSelector">
+
+    <TextView
+        android:id="@+id/registerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/registerText"
+        android:textSize="32dp" />
+
+    <Button
+        android:id="@+id/buttonEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/registerText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="CONTINUAR CON CORREO" />
+
+    <Button
+        android:id="@+id/buttonGoogle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonEmail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="CONTINUAR CON GOOGLE" />
+
+    <Button
+        android:id="@+id/buttonLogIn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonGoogle"
+        android:layout_alignLeft="@id/buttonGoogle"
+        android:layout_alignRight="@id/buttonGoogle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="INICIAR SESIÓN" />
+</RelativeLayout>
