@@ -41,6 +41,7 @@ public class RegisterSelector extends BaseFragment {
             @Override
             public void onClick(View v) {
                 //TODO login con google
+                navController.navigate(R.id.action_registerSelector_to_dashboardActivity);
             }
         });
 
