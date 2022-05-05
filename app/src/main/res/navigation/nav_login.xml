@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/registerSelector"
-        android:name="com.musiquitaapp.RegisterSelector"
+        android:name="com.musiquitaapp.screens.RegisterSelector"
         android:label="fragment_register_selector"
         tools:layout="@layout/fragment_register_selector" >
         <action
@@ -21,23 +21,13 @@
             app:destination="@id/dashboardActivity" />
     </fragment>
     <activity
-        android:id="@+id/loadingScreen"
-        android:name="com.musiquitaapp.LoadingScreen"
-        android:label="activity_loading_screen"
-        tools:layout="@layout/activity_loading_screen" />
-    <activity
-        android:id="@+id/authenticationMethodSelector"
-        android:name="com.musiquitaapp.AuthenticationMethodSelector"
-        android:label="activity_authentication_method_selector"
-        tools:layout="@layout/activity_authentication_method_selector" />
-    <activity
         android:id="@+id/dashboardActivity"
-        android:name="com.musiquitaapp.Dashboard"
+        android:name="com.musiquitaapp.screens.Dashboard"
         android:label="activity_dashboard"
         tools:layout="@layout/activity_dashboard" />
     <fragment
         android:id="@+id/createAccount"
-        android:name="com.musiquitaapp.CreateAccount"
+        android:name="com.musiquitaapp.screens.CreateAccount"
         android:label="fragment_create_account"
         tools:layout="@layout/fragment_create_account" >
         <action
@@ -46,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/login"
-        android:name="com.musiquitaapp.Login"
+        android:name="com.musiquitaapp.screens.Login"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action

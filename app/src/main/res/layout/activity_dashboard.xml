@@ -4,13 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
-    tools:context=".Dashboard">
+    tools:context=".screens.Dashboard"
+    tools:menu="@menu/bottom_nav_menu">
 
     <LinearLayout
         android:id="@+id/headerContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">>
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:paddingRight="20dp">>
 
         <ImageView
             android:id="@+id/logo"
@@ -39,5 +42,30 @@
             android:layout_gravity="center_vertical"
             app:srcCompat="@drawable/ic_baseline_person_24" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/main_nav"
+        android:layout_below="@id/headerContainer"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/main_frame"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_dashboard" />
+    </RelativeLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/main_nav"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/design_default_color_primary"
+        app:menu="@menu/bottom_nav_menu" />
 
 </RelativeLayout>

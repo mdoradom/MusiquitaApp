@@ -1,14 +1,12 @@
-package com.musiquitaapp;
+package com.musiquitaapp.screens;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.musiquitaapp.R;
 import com.musiquitaapp.databinding.FragmentRegisterSelectorBinding;
 
 public class RegisterSelector extends BaseFragment {

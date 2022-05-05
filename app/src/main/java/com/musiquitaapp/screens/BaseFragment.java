@@ -1,4 +1,4 @@
-package com.musiquitaapp;
+package com.musiquitaapp.screens;
 
 import android.os.Bundle;
 import android.view.View;

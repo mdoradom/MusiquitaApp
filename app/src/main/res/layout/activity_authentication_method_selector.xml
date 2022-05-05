@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context=".AuthenticationMethodSelector">
+    tools:context=".screens.AuthenticationMethodSelector">
 
     <LinearLayout
         android:id="@+id/headerContainer"
@@ -27,6 +27,6 @@
         android:layout_height="match_parent"
         android:layout_below="@id/headerContainer"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph" />
+        app:navGraph="@navigation/nav_login" />
 
 </RelativeLayout>

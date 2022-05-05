@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusiquitaApp">
         <activity
-            android:name=".AuthenticationMethodSelector"
+            android:name=".screens.AuthenticationMethodSelector"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,10 +19,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoadingScreen"
+            android:name=".screens.LoadingScreen"
             android:exported="false" />
         <activity
-            android:name=".Dashboard"
+            android:name=".screens.Dashboard"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

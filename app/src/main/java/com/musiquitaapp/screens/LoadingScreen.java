@@ -1,14 +1,16 @@
-package com.musiquitaapp;
+package com.musiquitaapp.screens;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class Dashboard extends AppCompatActivity {
+import com.musiquitaapp.R;
+
+public class LoadingScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_loading_screen);
     }
 }

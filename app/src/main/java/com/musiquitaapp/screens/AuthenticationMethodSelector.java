@@ -1,10 +1,11 @@
-package com.musiquitaapp;
+package com.musiquitaapp.screens;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 
+import com.musiquitaapp.R;
 import com.musiquitaapp.databinding.FragmentRegisterSelectorBinding;
 
 public class AuthenticationMethodSelector extends AppCompatActivity {

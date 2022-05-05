@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_library"
+    app:startDestination="@id/libraryArtistsFragment">
+
+    <fragment
+        android:id="@+id/libraryArtistsFragment"
+        android:name="com.musiquitaapp.screens.LibraryArtistsFragment"
+        android:label="fragment_library_artists"
+        tools:layout="@layout/fragment_library_artists" />
+    <fragment
+        android:id="@+id/libraryFragment2"
+        android:name="com.musiquitaapp.screens.LibraryFragment"
+        android:label="fragment_library"
+        tools:layout="@layout/fragment_library" >
+        <action
+            android:id="@+id/action_libraryFragment2_to_libraryPlaylistsFragment"
+            app:destination="@id/libraryPlaylistsFragment" />
+        <action
+            android:id="@+id/action_libraryFragment2_to_libraryAlbumsFragment"
+            app:destination="@id/libraryAlbumsFragment" />
+        <action
+            android:id="@+id/action_libraryFragment2_to_libraryArtistsFragment"
+            app:destination="@id/libraryArtistsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/libraryAlbumsFragment"
+        android:name="com.musiquitaapp.screens.LibraryAlbumsFragment"
+        android:label="fragment_library_albums"
+        tools:layout="@layout/fragment_library_albums" />
+    <fragment
+        android:id="@+id/libraryPlaylistsFragment"
+        android:name="com.musiquitaapp.screens.LibraryPlaylistsFragment"
+        android:label="fragment_library_playlists"
+        tools:layout="@layout/fragment_library_playlists" />
+</navigation>
