@@ -1,4 +1,4 @@
-package com.musiquitaapp.screens;
+package com.musiquitaapp.screens.main;
 
 import android.os.Bundle;
 
@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 
 import com.musiquitaapp.R;
 
-public class HomeFragment extends Fragment {
+public class SearchFragment extends Fragment {
 
-    public HomeFragment() {
+    public SearchFragment() {
         // Required empty public constructor
     }
 
@@ -25,9 +25,9 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        // TODO HomeFragment cosas
+        // TODO Fragment cosas
 
         return view;
     }

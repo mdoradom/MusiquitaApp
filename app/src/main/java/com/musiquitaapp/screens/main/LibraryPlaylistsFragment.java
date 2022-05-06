@@ -1,4 +1,4 @@
-package com.musiquitaapp.screens;
+package com.musiquitaapp.screens.main;
 
 import android.os.Bundle;
 
@@ -12,10 +12,10 @@ import com.musiquitaapp.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link LibraryAlbumsFragment#newInstance} factory method to
+ * Use the {@link LibraryPlaylistsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LibraryAlbumsFragment extends Fragment {
+public class LibraryPlaylistsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class LibraryAlbumsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public LibraryAlbumsFragment() {
+    public LibraryPlaylistsFragment() {
         // Required empty public constructor
     }
 
@@ -36,11 +36,11 @@ public class LibraryAlbumsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment LibraryAlbumsFragment.
+     * @return A new instance of fragment LibraryPlaylistsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static LibraryAlbumsFragment newInstance(String param1, String param2) {
-        LibraryAlbumsFragment fragment = new LibraryAlbumsFragment();
+    public static LibraryPlaylistsFragment newInstance(String param1, String param2) {
+        LibraryPlaylistsFragment fragment = new LibraryPlaylistsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +61,6 @@ public class LibraryAlbumsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_library_albums, container, false);
+        return inflater.inflate(R.layout.fragment_library_playlists, container, false);
     }
 }

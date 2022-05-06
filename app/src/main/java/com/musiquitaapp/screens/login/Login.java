@@ -1,4 +1,4 @@
-package com.musiquitaapp.screens;
+package com.musiquitaapp.screens.login;
 
 import android.os.Bundle;
 
@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 
 import com.musiquitaapp.R;
 import com.musiquitaapp.databinding.FragmentLoginBinding;
+import com.musiquitaapp.screens.BaseFragment;
 
 public class Login extends BaseFragment {
 

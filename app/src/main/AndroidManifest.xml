@@ -10,7 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusiquitaApp">
         <activity
-            android:name=".screens.AuthenticationMethodSelector"
+            android:name=".screens.media.PlayerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.media.ConnectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.media.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.login.AuthenticationMethodSelector"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +31,7 @@
             android:name=".screens.LoadingScreen"
             android:exported="false" />
         <activity
-            android:name=".screens.Dashboard"
+            android:name=".screens.main.Dashboard"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,4 +1,4 @@
-package com.musiquitaapp.screens;
+package com.musiquitaapp.screens.main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -19,11 +20,10 @@ import com.musiquitaapp.databinding.ActivityDashboardBinding;
 
 public class Dashboard extends AppCompatActivity {
 
-    private ActivityDashboardBinding binding;
+    NavController navController;
+    NavHostFragment navHostFragment;
 
-    private HomeFragment homeFragment;
-    private SearchFragment searchFragment;
-    private LibraryFragment libraryFragment;
+    private ActivityDashboardBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,32 +32,28 @@ public class Dashboard extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        homeFragment = new HomeFragment();
-        searchFragment = new SearchFragment();
-        libraryFragment = new LibraryFragment();
+        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_frame);
+        navController  = navHostFragment.getNavController();
 
         binding.mainNav.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.nav_home:
-                    setFragment(homeFragment);
+                    navController.navigate(R.id.homeFragment);
                     return true;
                 case R.id.nav_search:
-                    setFragment(searchFragment);
-
+                    navController.navigate(R.id.searchFragment);
                     return true;
                 case R.id.nav_library:
-                    setFragment(libraryFragment);
+                    navController.navigate(R.id.libraryFragment);
                     return true;
                 default:
                     return false;
             }
         });
+
+        binding.profileIcon.setOnClickListener(v -> navController.navigate(R.id.profileActivity));
+
+        binding.connectIcon.setOnClickListener(v -> navController.navigate(R.id.connectActivity));
     }
 
-    private void setFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_frame, fragment);
-        fragmentTransaction.commit();
-    }
 }

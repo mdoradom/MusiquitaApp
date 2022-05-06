@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/libraryArtistsFragment"
-        android:name="com.musiquitaapp.screens.LibraryArtistsFragment"
+        android:name="com.musiquitaapp.screens.main.LibraryArtistsFragment"
         android:label="fragment_library_artists"
         tools:layout="@layout/fragment_library_artists" />
     <fragment
         android:id="@+id/libraryFragment2"
-        android:name="com.musiquitaapp.screens.LibraryFragment"
+        android:name="com.musiquitaapp.screens.main.LibraryFragment"
         android:label="fragment_library"
         tools:layout="@layout/fragment_library" >
         <action
@@ -27,12 +27,12 @@
     </fragment>
     <fragment
         android:id="@+id/libraryAlbumsFragment"
-        android:name="com.musiquitaapp.screens.LibraryAlbumsFragment"
+        android:name="com.musiquitaapp.screens.main.LibraryAlbumsFragment"
         android:label="fragment_library_albums"
         tools:layout="@layout/fragment_library_albums" />
     <fragment
         android:id="@+id/libraryPlaylistsFragment"
-        android:name="com.musiquitaapp.screens.LibraryPlaylistsFragment"
+        android:name="com.musiquitaapp.screens.main.LibraryPlaylistsFragment"
         android:label="fragment_library_playlists"
         tools:layout="@layout/fragment_library_playlists" />
 </navigation>

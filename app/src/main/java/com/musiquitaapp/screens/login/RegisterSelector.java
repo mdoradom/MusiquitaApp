@@ -1,4 +1,4 @@
-package com.musiquitaapp.screens;
+package com.musiquitaapp.screens.login;
 
 import android.os.Bundle;
 
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.musiquitaapp.R;
 import com.musiquitaapp.databinding.FragmentRegisterSelectorBinding;
+import com.musiquitaapp.screens.BaseFragment;
 
 public class RegisterSelector extends BaseFragment {
 

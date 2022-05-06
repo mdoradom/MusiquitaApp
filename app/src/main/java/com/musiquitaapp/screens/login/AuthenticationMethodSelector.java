@@ -1,4 +1,4 @@
-package com.musiquitaapp.screens;
+package com.musiquitaapp.screens.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
