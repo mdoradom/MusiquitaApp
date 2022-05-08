@@ -9,8 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.musiquitaapp.R;
+import com.musiquitaapp.databinding.FragmentSearchBinding;
 
 public class SearchFragment extends Fragment {
+
+    private FragmentSearchBinding binding;
 
     public SearchFragment() {
         // Required empty public constructor
