@@ -7,7 +7,10 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import com.bumptech.glide.Glide;
 import com.musiquitaapp.R;
 import com.musiquitaapp.adapters.SearchAdapter;
 import com.musiquitaapp.databinding.ActivityPlayerBinding;
@@ -27,25 +30,34 @@ public class PlayerActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        YouTubeVideo song = startService();
+
         binding.playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(binding.playButton);
+                playSong(song);
             }
         });
 
-        //binding.favIcon.setChecked(postsList.get(position).likes.containsKey(auth.getUid()));
-
     }
 
-    private void startService() {
-        Intent serviceIntent = new Intent(getApplicationContext(), BackgroundAudioService.class);
+    private YouTubeVideo startService() {
+        Bundle bundle = getIntent().getExtras();
 
-        //binding.songImage.setImageResource();
+        YouTubeVideo youTubeVideo = (YouTubeVideo) bundle.getSerializable("song");
+
+        Glide.with(this).load(youTubeVideo.getThumbnailURL())
+                .into(binding.songImage);
+
+        return youTubeVideo;
+    }
+
+    private void playSong(YouTubeVideo song) {
+        Intent serviceIntent = new Intent(getApplicationContext(), BackgroundAudioService.class);
 
         serviceIntent.setAction(BackgroundAudioService.ACTION_PLAY);
         serviceIntent.putExtra(Config.YOUTUBE_TYPE, ItemType.YOUTUBE_MEDIA_TYPE_VIDEO);
-        //serviceIntent.putExtra(Config.YOUTUBE_TYPE_VIDEO, videoItem);
+        serviceIntent.putExtra(Config.YOUTUBE_TYPE_VIDEO, song);
 
         getApplicationContext().startService(serviceIntent);
     }

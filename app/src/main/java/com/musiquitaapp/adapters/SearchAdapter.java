@@ -1,5 +1,6 @@
 package com.musiquitaapp.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.musiquitaapp.models.Config;
 import com.musiquitaapp.models.ItemType;
 import com.musiquitaapp.models.Items;
 import com.musiquitaapp.models.YouTubeVideo;
+import com.musiquitaapp.screens.media.PlayerActivity;
 import com.musiquitaapp.services.BackgroundAudioService;
 
 import java.util.List;
@@ -55,6 +57,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
             //videoItem.setDuration();
             videoItem.setTitle(mItems.get(position).getSnippet().getTitle());
             videoItem.setThumbnailURL(mItems.get(position).getSnippet().getThumbnails().getHigh().getUrl());
+
+            /*Intent intent = new Intent(mContext, PlayerActivity.class);
+
+            intent.putExtra("song", videoItem);
+
+            mContext.startActivity(intent);*/
+
             Bundle bundle = new Bundle();
             bundle.putSerializable("song", videoItem);
             Navigation.createNavigateOnClickListener(R.id.action_searchFragment_to_playerActivity, bundle).onClick(v);
