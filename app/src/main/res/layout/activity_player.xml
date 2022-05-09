@@ -105,9 +105,9 @@
         android:layout_centerHorizontal="false"
         android:padding="20dp">
 
-        <ProgressBar
+        <SeekBar
             android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
+            style="@android:style/Widget.Material.SeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="false"

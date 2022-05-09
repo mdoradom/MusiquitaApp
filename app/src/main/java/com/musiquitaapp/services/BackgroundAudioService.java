@@ -240,7 +240,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
                 getApplicationContext(),
                 0,
                 new Intent(Intent.ACTION_MEDIA_BUTTON),
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
         mSession = new MediaSessionCompat(getApplicationContext(), "simple player session",

@@ -41,6 +41,10 @@ public class PlayerActivity extends AppCompatActivity {
 
     }
 
+    private void seekBarStatus(int songDuration) {
+        binding.progressBar.setMax(songDuration);
+    }
+
     private YouTubeVideo startService() {
         Bundle bundle = getIntent().getExtras();
 
