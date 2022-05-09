@@ -12,14 +12,69 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:padding="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <RelativeLayout
+                    android:id="@+id/topMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/exitIcon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentStart="true"
+                        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
+
+                    <ImageView
+                        android:id="@+id/searchIcon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toLeftOf="@id/editIcon"
+                        app:srcCompat="@drawable/ic_baseline_search_24" />
+
+                    <ImageView
+                        android:id="@+id/editIcon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toLeftOf="@id/shareIcon"
+                        app:srcCompat="@drawable/ic_baseline_edit_24" />
+
+                    <ImageView
+                        android:id="@+id/shareIcon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginLeft="10dp"
+                        app:srcCompat="@drawable/ic_baseline_share_24" />
+                </RelativeLayout>
+
+            </RelativeLayout>
 
             <ImageView
                 android:id="@+id/backgroundImage"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:scaleType="center"
-                app:srcCompat="@drawable/album" />
+                android:fadingEdge="none"
+                android:scaleType="centerCrop" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignBottom="@id/backgroundImage"
+                android:foreground="@drawable/gradient"
+                android:requiresFadingEdge="none" />
 
             <ImageView
                 android:id="@+id/profileImage"
@@ -27,8 +82,7 @@
                 android:layout_height="100dp"
                 android:layout_below="@id/backgroundImage"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="-50dp"
-                app:srcCompat="@drawable/album" />
+                android:layout_marginTop="-50dp" />
 
             <TextView
                 android:id="@+id/userNameText"
@@ -51,6 +105,7 @@
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisis quisque ut laoreet volutpat porttitor sed vel auctor vel. Aliquet tincidunt porta dictum int..." />
 
             <RelativeLayout
+                android:id="@+id/statsBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/description"
@@ -125,52 +180,25 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/playlistsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/statsBox"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="20dp"
+                android:text="Playlists"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerPlaylists"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:padding="20dp"
+                android:layout_below="@id/playlistsText"
+                android:layout_marginTop="5dp"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp">
-
-                <RelativeLayout
-                    android:id="@+id/topMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/exitIcon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentStart="true"
-                        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
-
-                    <ImageView
-                        android:id="@+id/searchIcon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toLeftOf="@id/editIcon"
-                        app:srcCompat="@drawable/ic_baseline_search_24" />
-
-                    <ImageView
-                        android:id="@+id/editIcon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toLeftOf="@id/shareIcon"
-                        app:srcCompat="@drawable/ic_baseline_edit_24" />
-
-                    <ImageView
-                        android:id="@+id/shareIcon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginLeft="10dp"
-                        app:srcCompat="@drawable/ic_baseline_share_24" />
-                </RelativeLayout>
-
-            </RelativeLayout>
+                android:paddingRight="20dp" />
 
         </RelativeLayout>
     </ScrollView>

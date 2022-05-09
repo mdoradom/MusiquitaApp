@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_searchFragment_to_connectActivity"
             app:destination="@id/connectActivity" />
+        <action
+            android:id="@+id/action_searchFragment_to_playerActivity"
+            app:destination="@id/playerActivity" />
     </fragment>
     <fragment
         android:id="@+id/libraryFragment"
@@ -55,5 +58,12 @@
         android:id="@+id/playerActivity"
         android:name="com.musiquitaapp.screens.media.PlayerActivity"
         android:label="activity_player"
-        tools:layout="@layout/activity_player" />
+        tools:layout="@layout/activity_player" >
+        <argument
+            android:name="song"
+            app:argType="com.musiquitaapp.models.YouTubeVideo" />
+        <argument
+            android:name="queue"
+            app:argType="com.musiquitaapp.models.YouTubeVideo[]" />
+    </activity>
 </navigation>
