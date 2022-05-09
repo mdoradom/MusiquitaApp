@@ -14,8 +14,6 @@ import android.os.PowerManager;
 import android.support.v4.media.RatingCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.Toast;
@@ -76,7 +74,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
         mMediaPlayer.setOnCompletionListener(this);
         mMediaPlayer.setOnPreparedListener(this);
         initMediaSessions();
-        initPhoneCallListener();
+        //initPhoneCallListener();
         deviceBandwidthSampler = DeviceBandwidthSampler.getInstance();
     }
     @Override
@@ -177,7 +175,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
         mMediaPlayer.setOnCompletionListener(this);
         mMediaPlayer.setOnPreparedListener(this);
         initMediaSessions();
-        initPhoneCallListener();
+        //initPhoneCallListener();
         deviceBandwidthSampler = DeviceBandwidthSampler.getInstance();
         String youtubeLink = Config.YOUTUBE_BASE_URL + videoItem.getId();
         deviceBandwidthSampler.startSampling();
@@ -300,7 +298,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
                 }
         );
     }
-    private void initPhoneCallListener() {
+    /*private void initPhoneCallListener() {
         PhoneStateListener phoneStateListener = new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
@@ -322,7 +320,8 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
         if (mgr != null) {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
-    }
+    }*/
+
     private void pauseVideo() {
         if (mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
@@ -335,12 +334,12 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
 
         Intent intent = new Intent(getApplicationContext(), BackgroundAudioService.class);
         intent.setAction(ACTION_STOP);
-        PendingIntent stopPendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
+        PendingIntent stopPendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         Intent clickIntent = new Intent(this, PlayerActivity.class);
         clickIntent.setAction(Intent.ACTION_MAIN);
         clickIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        PendingIntent clickPendingIntent = PendingIntent.getActivity(this, 0, clickIntent, 0);
+        PendingIntent clickPendingIntent = PendingIntent.getActivity(this, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         builder = new NotificationCompat.Builder(this, "1");
         builder.setSmallIcon(R.mipmap.ic_launcher);
@@ -370,7 +369,11 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
     private NotificationCompat.Action generateAction(int icon, String title, String intentAction) {
         Intent intent = new Intent(getApplicationContext(), BackgroundAudioService.class);
         intent.setAction(intentAction);
-        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getService(
+                getApplicationContext(),
+                1,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         return new NotificationCompat.Action.Builder(icon, title, pendingIntent).build();
     }
 

@@ -3,7 +3,9 @@ package com.musiquitaapp.screens.media;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.widget.SeekBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -22,6 +24,7 @@ import com.musiquitaapp.services.BackgroundAudioService;
 public class PlayerActivity extends AppCompatActivity {
 
     private ActivityPlayerBinding binding;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,9 @@ public class PlayerActivity extends AppCompatActivity {
 
         YouTubeVideo song = startService();
 
+        //binding.progressBar.setMax(song.getDuration());
+        binding.progressBar.setMax(1000);
+
         binding.playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,10 +45,27 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
+        binding.progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                binding.progressBar.setProgress(0 /*current time player*/);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
     }
 
-    private void seekBarStatus(int songDuration) {
-        binding.progressBar.setMax(songDuration);
+    private void initializeSeekBar(YouTubeVideo song) {
+        binding.progressBar.setMax(1/*song.getDuration()*/); // necesito int (es double)
     }
 
     private YouTubeVideo startService() {

@@ -6,23 +6,12 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\mario\.android\avd\Pixel_5_API_32.avd" />
+            <type value="SERIAL_NUMBER" />
+            <value value="adb-94ebcbd0-7xwN8J._adb-tls-connect._tcp" />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
-    <targetSelectedWithDropDown>
-      <Target>
-        <type value="QUICK_BOOT_TARGET" />
-        <deviceKey>
-          <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\mario\.android\avd\Pixel_5_API_32.avd" />
-          </Key>
-        </deviceKey>
-      </Target>
-    </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2022-05-09T19:31:30.975766200Z" />
+    <timeTargetWasSelectedWithDropDown value="2022-05-09T20:21:17.073649Z" />
   </component>
 </project>
