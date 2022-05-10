@@ -17,7 +17,7 @@
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/activity_connect.xml" value="0.5" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/activity_dashboard.xml" value="0.371875" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/activity_main.xml" value="0.35054347826086957" />
-        <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/activity_player.xml" value="0.33" />
+        <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/activity_player.xml" value="0.25" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/activity_profile.xml" value="0.33" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/fragment_album.xml" value="0.2" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/fragment_artist.xml" value="0.22" />
@@ -31,6 +31,7 @@
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/fragment_register_selector.xml" value="0.371875" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/fragment_search.xml" value="0.33" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/search_layout.xml" value="0.5" />
+        <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/menu/player_menu.xml" value="0.33055555555555555" />
         <entry key="app/src/main/res/layout/activity_authentication_method_selector.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_create_account.xml" value="0.18333333333333332" />

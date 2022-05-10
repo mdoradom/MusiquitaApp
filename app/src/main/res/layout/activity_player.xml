@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -50,10 +51,10 @@
 
         <ImageView
             android:id="@+id/songImage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            app:srcCompat="@drawable/album" />
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:adjustViewBounds="false"
+            android:scaleType="center" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -69,12 +70,20 @@
                 android:clickable="true"
                 app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
 
+            <Space
+                android:id="@+id/hook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/favIcon" />
+
             <TextView
                 android:id="@+id/songTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/hook"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
+                android:lines="1"
                 android:text="TITULO CANCION"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -84,6 +93,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/songTitle"
+                android:layout_alignEnd="@id/hook"
+                android:layout_alignParentStart="true"
                 android:text="Artista" />
         </RelativeLayout>
 
@@ -107,7 +118,6 @@
 
         <SeekBar
             android:id="@+id/progressBar"
-            style="@android:style/Widget.Material.SeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="false"
@@ -118,16 +128,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/progressBar"
-            android:layout_alignParentStart="true"
-            android:text="TextView" />
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:id="@+id/songLenght"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/progressBar"
-            android:layout_alignParentEnd="true"
-            android:text="TextView" />
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
     <Space
@@ -201,7 +209,7 @@
             android:textSize="16sp" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/queueButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

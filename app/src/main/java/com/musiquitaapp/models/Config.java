@@ -14,7 +14,8 @@ public final class Config {
     public static final String YOUTUBE_QUERY1 = "https://www.googleapis.com/youtube/v3/search?part=snippet&&maxResults=25&q=";
     public static final String YOUTUBE_QUERY2 = "&type=all&key=";
 
-    public static final String YOUTUBE_API_KEY = "AIzaSyA4dKwi4otNjyMKgiQGv3gMEUFDBxRTcJ4";
+    //public static final String YOUTUBE_API_KEY = "AIzaSyA4dKwi4otNjyMKgiQGv3gMEUFDBxRTcJ4";
+    public static final String YOUTUBE_API_KEY = "AIzaSyDc7nfmLCmBYXiVf_uu3rwSJk3_izJQekc";
 
     public static final long NUMBER_OF_VIDEOS_RETURNED = 30; //due to YouTube API rules - MAX 50
 
