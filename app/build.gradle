@@ -44,6 +44,7 @@ dependencies {
     // glide
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.google.android.gms:play-services-basement:17.6.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
         // glide blur
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
@@ -74,6 +75,9 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
     implementation 'com.github.evgenyneu:js-evaluator-for-android:v5.0.0'
+
+    // permisos
+    implementation 'pub.devrel:easypermissions:3.0.0'
 
     // --------
 

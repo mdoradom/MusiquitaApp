@@ -185,8 +185,8 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
             protected void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta videoMeta) {
                 if (ytFiles == null) {
                     // Something went wrong we got no urls. Always check this.
-                    Toast.makeText(getApplicationContext(), "R.string.failed_playback",
-                            Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "R.string.failed_playback",
+                            //Toast.LENGTH_SHORT).show();
                     return;
                 }
                 deviceBandwidthSampler.stopSampling();
@@ -218,7 +218,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();*/
                     Log.d("AAAAAAAA",String.valueOf(player.isPlaying()));
-                    Toast.makeText(getApplicationContext(), "videoItem.getTitle()", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "videoItem.getTitle()", Toast.LENGTH_SHORT).show();
                 }
             }
         };

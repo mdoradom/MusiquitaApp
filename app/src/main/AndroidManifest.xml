@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.musiquitaapp">
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.INTERNET" />
@@ -7,8 +8,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL"
+        tools:ignore="ProtectedPermissions" />
 
     <application
+        android:name=".youtube.YTApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,6 +26,10 @@
             android:exported="true"
             android:label="Youtube" />
 
+        <activity
+            android:name=".screens.LoadingScreen"
+            android:exported="false">
+        </activity>
         <activity
             android:name=".screens.media.PlayerActivity"
             android:exported="false" />
@@ -40,9 +48,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".screens.LoadingScreen"
-            android:exported="false" />
         <activity
             android:name=".screens.main.Dashboard"
             android:exported="true">

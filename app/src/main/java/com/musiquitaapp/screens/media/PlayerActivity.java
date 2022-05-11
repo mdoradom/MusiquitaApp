@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,6 +12,10 @@ import android.os.Handler;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -53,6 +58,7 @@ public class PlayerActivity extends AppCompatActivity {
     private ActivityPlayerBinding binding;
     private Handler handler = new Handler();
     private boolean isChecked = false;
+    private boolean isPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +72,15 @@ public class PlayerActivity extends AppCompatActivity {
         //binding.progressBar.setMax(song.getDuration());
         binding.progressBar.setMax(1000);
 
-        binding.playButton.setOnClickListener(v -> PlayerActivity.this.playSong(song));
+        binding.playButton.setOnClickListener(v -> {
+            PlayerActivity.this.playSong(song);
+            if (isPlaying) {
+                rotateAnimation(binding.playButton);
+                binding.playButton.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24);
+            } else {
+                binding.playButton.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
+            }
+        });
 
         binding.progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -113,6 +127,13 @@ public class PlayerActivity extends AppCompatActivity {
 
     }
 
+    private void rotateAnimation(ImageView imageView) {
+        RotateAnimation anim = new RotateAnimation(0.0f, 180.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        anim.setInterpolator(new LinearInterpolator());
+        anim.setDuration(500);
+        imageView.startAnimation(anim);
+    }
+
     private YouTubeVideo startService() {
         Bundle bundle = getIntent().getExtras();
 
@@ -123,11 +144,13 @@ public class PlayerActivity extends AppCompatActivity {
                 .listener(new RequestListener<Bitmap>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                        isPlaying = false;
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                        isPlaying = true;
                         Palette palette = Palette.from(resource).generate();
                         Palette.Swatch vibrant = palette.getVibrantSwatch();
 
@@ -155,6 +178,9 @@ public class PlayerActivity extends AppCompatActivity {
                             // change nav bar color
                             getWindow().setNavigationBarColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), 150));
 
+                            // change seekbar color
+                            binding.progressBar.getThumb().setColorFilter(vibrant.getBodyTextColor(), PorterDuff.Mode.SRC_IN);
+
                             // change image resource
                             binding.songImage.setImageBitmap(resource);
                         }
@@ -166,7 +192,7 @@ public class PlayerActivity extends AppCompatActivity {
                 .into(binding.songImage);
 
         binding.songTitle.setText(youTubeVideo.getTitle());
-        //binding.artistName.setText(youTubeVideo.get);
+        binding.songTitle.setSelected(true);
         binding.songLenght.setText(youTubeVideo.getDuration());
 
         return youTubeVideo;
