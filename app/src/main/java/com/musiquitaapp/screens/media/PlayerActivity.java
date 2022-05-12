@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -59,6 +60,7 @@ public class PlayerActivity extends AppCompatActivity {
     private Handler handler = new Handler();
     private boolean isChecked = false;
     private boolean isPlaying = false;
+    private AnimationDrawable animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,12 +141,17 @@ public class PlayerActivity extends AppCompatActivity {
 
         YouTubeVideo youTubeVideo = (YouTubeVideo) bundle.getSerializable("song");
 
+        System.out.println(youTubeVideo.getThumbnailURL());
+
         Glide.with(PlayerActivity.this)
                 .asBitmap()
                 .listener(new RequestListener<Bitmap>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                         isPlaying = false;
+                        // TODO fails to load song thubnail revisar
+                        System.out.println("Failed to load Song Image, replacing with placeholder animation");
+                        loadAnimation();
                         return false;
                     }
 
@@ -210,5 +217,27 @@ public class PlayerActivity extends AppCompatActivity {
         serviceIntent.putExtra(Config.YOUTUBE_TYPE_VIDEO, song);
 
         getApplicationContext().startService(serviceIntent);
+    }
+
+    private void loadAnimation() {
+        animation = new AnimationDrawable();
+        loadFrames();
+        animation.setOneShot(false);
+        binding.songImage.setImageDrawable(animation);
+        animation.start();
+    }
+
+    private void loadFrames() {
+        int randomNum = 1 + (int)(Math.random() * 5);
+        String sImage;
+        for (int i = 1; i <= 300; i++) {
+            sImage = "animation" + randomNum + "frame";
+            animation.addFrame(
+                    ResourcesCompat.getDrawable(
+                            getResources(), getResources().getIdentifier(
+                                    sImage + i , "drawable", getPackageName()),
+                            null),
+                    50);
+        }
     }
 }
