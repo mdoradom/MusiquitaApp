@@ -54,7 +54,7 @@
             android:layout_width="350dp"
             android:layout_height="350dp"
             android:adjustViewBounds="false"
-            android:scaleType="center" />
+            android:scaleType="fitCenter" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -207,14 +207,6 @@
         android:layout_alignParentBottom="true"
         android:padding="20dp">
 
-        <TextView
-            android:id="@+id/lyricsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Letra"
-            android:textSize="16sp" />
-
         <ImageView
             android:id="@+id/queueButton"
             android:layout_width="wrap_content"
@@ -223,6 +215,13 @@
             android:layout_centerHorizontal="false"
             android:layout_centerVertical="true"
             app:srcCompat="@drawable/ic_baseline_playlist_play_24" />
+
+        <Switch
+            android:id="@+id/bgSelector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:showText="false" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -18,6 +18,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
@@ -56,11 +57,14 @@ import java.util.concurrent.TransferQueue;
 
 public class PlayerActivity extends AppCompatActivity {
 
+    private int alpha = 200;
+
     private ActivityPlayerBinding binding;
     private Handler handler = new Handler();
     private boolean isChecked = false;
     private boolean isPlaying = false;
     private AnimationDrawable animation;
+    private YouTubeVideo youTubeVideo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +131,17 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
+        binding.bgSelector.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    loadAnimation();
+                } else {
+                    loadImage();
+                }
+            }
+        });
+
     }
 
     private void rotateAnimation(ImageView imageView) {
@@ -139,10 +154,20 @@ public class PlayerActivity extends AppCompatActivity {
     private YouTubeVideo startService() {
         Bundle bundle = getIntent().getExtras();
 
-        YouTubeVideo youTubeVideo = (YouTubeVideo) bundle.getSerializable("song");
+        youTubeVideo = (YouTubeVideo) bundle.getSerializable("song");
 
         System.out.println(youTubeVideo.getThumbnailURL());
 
+        loadImage();
+
+        binding.songTitle.setText(youTubeVideo.getTitle());
+        binding.songTitle.setSelected(true);
+        binding.songLenght.setText(youTubeVideo.getDuration());
+
+        return youTubeVideo;
+    }
+
+    private void loadImage() {
         Glide.with(PlayerActivity.this)
                 .asBitmap()
                 .listener(new RequestListener<Bitmap>() {
@@ -163,13 +188,12 @@ public class PlayerActivity extends AppCompatActivity {
 
                         if (vibrant != null) {
                             // change background color
-                            binding.mainContainer.setBackgroundColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), 150));
+                            binding.mainContainer.setBackgroundColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), alpha));
 
                             // change text color
                             binding.songTitle.setTextColor(vibrant.getBodyTextColor());
                             binding.artistName.setTextColor(vibrant.getBodyTextColor());
                             binding.playingText.setTextColor(vibrant.getBodyTextColor());
-                            binding.lyricsButton.setTextColor(vibrant.getBodyTextColor());
 
                             // change buttons color
                             binding.playButton.setColorFilter(vibrant.getBodyTextColor());
@@ -183,7 +207,10 @@ public class PlayerActivity extends AppCompatActivity {
                             binding.moreIcon.setColorFilter(vibrant.getBodyTextColor());
 
                             // change nav bar color
-                            getWindow().setNavigationBarColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), 150));
+                            getWindow().setNavigationBarColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), alpha));
+
+                            // change top bar color
+                            getWindow().setStatusBarColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), alpha));
 
                             // change seekbar color
                             binding.progressBar.getThumb().setColorFilter(vibrant.getBodyTextColor(), PorterDuff.Mode.SRC_IN);
@@ -197,12 +224,6 @@ public class PlayerActivity extends AppCompatActivity {
                 })
                 .load(youTubeVideo.getThumbnailURL())
                 .into(binding.songImage);
-
-        binding.songTitle.setText(youTubeVideo.getTitle());
-        binding.songTitle.setSelected(true);
-        binding.songLenght.setText(youTubeVideo.getDuration());
-
-        return youTubeVideo;
     }
 
     private void initializeSeekBar(YouTubeVideo song) {
@@ -224,12 +245,47 @@ public class PlayerActivity extends AppCompatActivity {
         loadFrames();
         animation.setOneShot(false);
         binding.songImage.setImageDrawable(animation);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.animation1frame1);
+        // TODO arreglar devuelve bitmap vacio
+        Palette palette = Palette.from(bitmap).generate();
+        Palette.Swatch vibrant = palette.getVibrantSwatch();
+
+        //change colors
+        // change background color
+        binding.mainContainer.setBackgroundColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), alpha));
+
+        // change text color
+        binding.songTitle.setTextColor(vibrant.getBodyTextColor());
+        binding.artistName.setTextColor(vibrant.getBodyTextColor());
+        binding.playingText.setTextColor(vibrant.getBodyTextColor());
+
+        // change buttons color
+        binding.playButton.setColorFilter(vibrant.getBodyTextColor());
+        binding.nextButton.setColorFilter(vibrant.getBodyTextColor());
+        binding.previousButton.setColorFilter(vibrant.getBodyTextColor());
+        binding.shuffleButton.setColorFilter(vibrant.getBodyTextColor());
+        binding.loopButton.setColorFilter(vibrant.getBodyTextColor());
+        binding.queueButton.setColorFilter(vibrant.getBodyTextColor());
+        binding.favIcon.setColorFilter(vibrant.getBodyTextColor());
+        binding.backArrowIcon.setColorFilter(vibrant.getBodyTextColor());
+        binding.moreIcon.setColorFilter(vibrant.getBodyTextColor());
+
+        // change nav bar color
+        getWindow().setNavigationBarColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), alpha));
+
+        // change top bar color
+        getWindow().setStatusBarColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), alpha));
+
+        // change seekbar color
+        binding.progressBar.getThumb().setColorFilter(vibrant.getBodyTextColor(), PorterDuff.Mode.SRC_IN);
+
         animation.start();
     }
 
     private void loadFrames() {
         int randomNum = 1 + (int)(Math.random() * 5);
-        String sImage;
+        String sImage = null;
         for (int i = 1; i <= 300; i++) {
             sImage = "animation" + randomNum + "frame";
             animation.addFrame(

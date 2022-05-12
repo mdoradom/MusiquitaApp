@@ -65,7 +65,6 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/design_default_color_primary"
         app:menu="@menu/bottom_nav_menu" />
 
 </RelativeLayout>
