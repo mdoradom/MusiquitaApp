@@ -54,16 +54,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
         holder.relativeLayout.setOnClickListener(v -> {
             videoItem = new YouTubeVideo();
             videoItem.setId(mItems.get(position).getId().videoId);
-            //videoItem.setDuration();
             videoItem.setTitle(mItems.get(position).getSnippet().getTitle());
             videoItem.setThumbnailURL(mItems.get(position).getSnippet().getThumbnails().getHigh().getUrl());
-
-            /*Intent intent = new Intent(mContext, PlayerActivity.class);
-
-            intent.putExtra("song", videoItem);
-
-            mContext.startActivity(intent);*/
-
             Bundle bundle = new Bundle();
             bundle.putSerializable("song", videoItem);
             Navigation.createNavigateOnClickListener(R.id.action_searchFragment_to_playerActivity, bundle).onClick(v);

@@ -1,10 +1,13 @@
 package com.musiquitaapp.models;
 
 public class Snippet {
-    String publishedAt;
-    String channelId;
-    String title;
-    String description;
+    private String publishedAt;
+    private String channelId;
+    private String title;
+    private String description;
+    private Thumbnail thumbnails;
+    private String channelTitle;
+    private String publishTime;
 
     public Snippet(String publishedAt, String channelId, String title, String description, Thumbnail thumbnails, String channelTitle, String publishTime) {
         this.publishedAt = publishedAt;
@@ -16,8 +19,7 @@ public class Snippet {
         this.publishTime = publishTime;
     }
 
-    public Snippet() {
-    }
+    public Snippet() { }
 
     public String getPublishedAt() {
         return publishedAt;
@@ -74,8 +76,4 @@ public class Snippet {
     public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
-
-    Thumbnail thumbnails;
-    String channelTitle;
-    String publishTime;
 }

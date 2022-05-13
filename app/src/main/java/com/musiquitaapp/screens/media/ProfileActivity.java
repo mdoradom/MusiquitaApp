@@ -1,15 +1,27 @@
 package com.musiquitaapp.screens.media;
 
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.auth.User;
+import com.google.firebase.storage.FirebaseStorage;
+import com.musiquitaapp.R;
 import com.musiquitaapp.databinding.ActivityProfileBinding;
+import com.musiquitaapp.screens.login.AuthenticationMethodSelector;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
@@ -22,17 +34,39 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
+
         setContentView(view);
 
+        setProfileResources();
+
+        binding.profileImage.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getApplicationContext(), new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build());
+
+            googleSignInClient.signOut();
+
+            Intent intent = new Intent(ProfileActivity.this, AuthenticationMethodSelector.class);
+            startActivity(intent);
+        });
+    }
+
+    private void setProfileResources() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Load pfp image
+        Glide.with(this).load(user.getPhotoUrl())
+                .circleCrop()
+                .into(binding.profileImage);
+
         // Load background image
-        Glide.with(this).load("https://cdna.artstation.com/p/assets/images/images/048/372/492/large/_z-ed_-da.jpg?1649869257")
+        Glide.with(this).load(""/*TODO añadir url descarga imagen background*/)
                 .apply(RequestOptions.bitmapTransform(new BlurTransformation(10, 1)))
                 .into(binding.backgroundImage);
 
-        // Load pfp image
-        Glide.with(this).load("https://i.pinimg.com/originals/19/cf/78/19cf789a8e216dc898043489c16cec00.jpg")
-                .circleCrop()
-                .into(binding.profileImage);
+        binding.userNameText.setText(user.getDisplayName());
     }
 
     @Override

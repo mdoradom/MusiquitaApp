@@ -66,4 +66,9 @@
             android:name="queue"
             app:argType="com.musiquitaapp.models.YouTubeVideo[]" />
     </activity>
+    <activity
+        android:id="@+id/authenticationMethodSelector"
+        android:name="com.musiquitaapp.screens.login.AuthenticationMethodSelector"
+        android:label="activity_authentication_method_selector"
+        tools:layout="@layout/activity_authentication_method_selector" />
 </navigation>

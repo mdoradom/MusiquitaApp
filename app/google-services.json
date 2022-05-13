@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "999577348413",
+    "project_id": "musiquitaapp-23411",
+    "storage_bucket": "musiquitaapp-23411.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999577348413:android:b7c7e926ed46d021efbd54",
+        "android_client_info": {
+          "package_name": "com.musiquitaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999577348413-3njqlq4jpqt7o9pjp5psruepntq1g5if.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.musiquitaapp",
+            "certificate_hash": "a51089ef643e76a3a07e590a3f5117e109970ad7"
+          }
+        },
+        {
+          "client_id": "999577348413-gtk6i1u1mhakl2pela16mvrb40i6k27h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLBp1lBoCuYrjxWxWEF-QEIzxRXpW4LF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999577348413-gtk6i1u1mhakl2pela16mvrb40i6k27h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,18 @@
 package com.musiquitaapp.models;
 
 public class Thumbnail {
+
+    private Medium medium;
+    private High high;
+
+    public Thumbnail(Medium medium, High high) {
+        this.medium = medium;
+        this.high = high;
+    }
+
+    public Thumbnail() {
+    }
+
     public Medium getMedium() {
         return medium;
     }
@@ -17,14 +29,4 @@ public class Thumbnail {
         this.high = high;
     }
 
-    public Thumbnail(Medium medium, High high) {
-        this.medium = medium;
-        this.high = high;
-    }
-
-    public Thumbnail() {
-    }
-
-    Medium medium;
-    High high;
 }

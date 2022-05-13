@@ -5,4 +5,5 @@
     <string name="registerText">Regístrate</string>
     <string name="crear_cuenta">Crear Cuenta</string>
     <string name="all_permissions_request">Request permissions</string>
+    <!-- <string name="default_web_client_id" translatable="false">999577348413-gtk6i1u1mhakl2pela16mvrb40i6k27h.apps.googleusercontent.com</string> -->
 </resources>

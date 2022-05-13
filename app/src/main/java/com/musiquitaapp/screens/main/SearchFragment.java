@@ -82,7 +82,7 @@ public class SearchFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                Config.YOUTUBE_QUERY1 + binding.searchbar.getText() + Config.YOUTUBE_QUERY2 + Config.YOUTUBE_API_KEY,
+                Config.YOUTUBE_QUERY_VIDEO + binding.searchbar.getText() + Config.YOUTUBE_QUERY_VIDEO_2 + Config.YOUTUBE_API_KEY,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override

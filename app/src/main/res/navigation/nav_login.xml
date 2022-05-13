@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_registerSelector_to_dashboardActivity"
             app:destination="@id/dashboardActivity" />
+        <action
+            android:id="@+id/action_registerSelector_to_profileActivity2"
+            app:destination="@id/profileActivity2" />
     </fragment>
     <activity
         android:id="@+id/dashboardActivity"
@@ -43,4 +46,9 @@
             android:id="@+id/action_login_to_dashboardActivity"
             app:destination="@id/dashboardActivity" />
     </fragment>
+    <activity
+        android:id="@+id/profileActivity2"
+        android:name="com.musiquitaapp.screens.media.ProfileActivity"
+        android:label="activity_profile"
+        tools:layout="@layout/activity_profile" />
 </navigation>

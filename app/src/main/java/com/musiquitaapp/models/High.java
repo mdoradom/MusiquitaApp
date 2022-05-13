@@ -1,9 +1,19 @@
 package com.musiquitaapp.models;
 
 public class High {
-    String url;
-    int width;
-    int height;
+    private String url;
+    private int width;
+    private int height;
+
+    public High(String url, int width, int height) {
+        this.url = url;
+        this.width = width;
+        this.height = height;
+    }
+
+
+    public High() {
+    }
 
     public String getUrl() {
         return url;
@@ -29,12 +39,4 @@ public class High {
         this.height = height;
     }
 
-    public High() {
-    }
-
-    public High(String url, int width, int height) {
-        this.url = url;
-        this.width = width;
-        this.height = height;
-    }
 }

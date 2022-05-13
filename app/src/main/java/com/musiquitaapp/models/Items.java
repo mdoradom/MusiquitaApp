@@ -1,8 +1,18 @@
 package com.musiquitaapp.models;
 
 public class Items {
-    String kind;
-    Id id;
+    private String kind;
+    private Id id;
+    private Snippet snippet;
+
+    public Items(String kind, Id id, Snippet snippet) {
+        this.kind = kind;
+        this.id = id;
+        this.snippet = snippet;
+    }
+
+    public Items() {
+    }
 
     public String getKind() {
         return kind;
@@ -28,14 +38,4 @@ public class Items {
         this.snippet = snippet;
     }
 
-    public Items(String kind, Id id, Snippet snippet) {
-        this.kind = kind;
-        this.id = id;
-        this.snippet = snippet;
-    }
-
-    public Items() {
-    }
-
-    Snippet snippet;
 }

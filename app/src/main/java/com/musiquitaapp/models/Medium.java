@@ -1,9 +1,19 @@
 package com.musiquitaapp.models;
 
 public class Medium {
-    String url;
-    int width;
-    int height;
+
+    private String url;
+    private int width;
+    private int height;
+
+    public Medium(String url, int width, int height) {
+        this.url = url;
+        this.width = width;
+        this.height = height;
+    }
+
+    public Medium() {
+    }
 
     public String getUrl() {
         return url;
@@ -27,14 +37,5 @@ public class Medium {
 
     public void setHeight(int height) {
         this.height = height;
-    }
-
-    public Medium(String url, int width, int height) {
-        this.url = url;
-        this.width = width;
-        this.height = height;
-    }
-
-    public Medium() {
     }
 }

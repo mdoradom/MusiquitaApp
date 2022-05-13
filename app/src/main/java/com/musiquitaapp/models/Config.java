@@ -11,8 +11,11 @@ public final class Config {
     public static final String YOUTUBE_TYPE_VIDEO = "YT_VIDEO";
     public static final String YOUTUBE_TYPE_PLAYLIST= "YT_PLAYLIST";
     public static final String YOUTUBE_TYPE_PLAYLIST_VIDEO_POS = "YT_PLAYLIST_VIDEO_POS";
-    public static final String YOUTUBE_QUERY1 = "https://www.googleapis.com/youtube/v3/search?part=snippet&&maxResults=25&q=";
-    public static final String YOUTUBE_QUERY2 = "&type=all&key=";
+    public static final String YOUTUBE_QUERY_VIDEO = "https://www.googleapis.com/youtube/v3/search?part=snippet&&maxResults=25&q=";
+    public static final String YOUTUBE_QUERY_VIDEO_2 = "&type=all&key=";
+
+    public static final String YOUTUBE_QUERY_PLAYLISTS = "https://www.googleapis.com/youtube/v3/search?part=snippet&&maxResults=25&q=";
+    public static final String YOUTUBE_QUERY_PLAYLISTS_2 = "&type=playlist&key=";
 
     //public static final String YOUTUBE_API_KEY = "AIzaSyA4dKwi4otNjyMKgiQGv3gMEUFDBxRTcJ4";
     public static final String YOUTUBE_API_KEY = "AIzaSyDc7nfmLCmBYXiVf_uu3rwSJk3_izJQekc";
