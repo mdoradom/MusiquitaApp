@@ -1,70 +1,50 @@
 package com.musiquitaapp.screens.media;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.palette.graphics.Palette;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.musiquitaapp.R;
-import com.musiquitaapp.adapters.SearchAdapter;
 import com.musiquitaapp.databinding.ActivityPlayerBinding;
 import com.musiquitaapp.models.Config;
 import com.musiquitaapp.models.ItemType;
 import com.musiquitaapp.models.YouTubeVideo;
 import com.musiquitaapp.services.BackgroundAudioService;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TransferQueue;
-
 public class PlayerActivity extends AppCompatActivity {
 
     private int alpha = 200;
 
     private ActivityPlayerBinding binding;
-    private Handler handler = new Handler();
     private boolean isChecked = false;
     private boolean isPlaying = false;
     private AnimationDrawable animation;
     private YouTubeVideo youTubeVideo;
+    private int oldTextColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,13 +90,10 @@ public class PlayerActivity extends AppCompatActivity {
         binding.moreIcon.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(PlayerActivity.this, binding.moreIcon);
             popupMenu.getMenuInflater().inflate(R.menu.player_menu, popupMenu.getMenu());
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    System.out.println("You Clicked " + item.getTitle());
-                    Toast.makeText(PlayerActivity.this, "You Clicked " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                    return true;
-                }
+            popupMenu.setOnMenuItemClickListener(item -> {
+                System.out.println("You Clicked " + item.getTitle());
+                Toast.makeText(PlayerActivity.this, "You Clicked " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                return true;
             });
             popupMenu.show();
         });
@@ -136,8 +113,36 @@ public class PlayerActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     loadAnimation();
+                    // change background color
+                    binding.mainContainer.setBackgroundColor(0);
+
+                    // change text color
+                    binding.songTitle.setTextColor(oldTextColor);
+                    binding.artistName.setTextColor(oldTextColor);
+                    binding.playingText.setTextColor(oldTextColor);
+
+                    // change buttons color
+                    binding.playButton.setColorFilter(0);
+                    binding.nextButton.setColorFilter(0);
+                    binding.previousButton.setColorFilter(0);
+                    binding.shuffleButton.setColorFilter(0);
+                    binding.loopButton.setColorFilter(0);
+                    binding.queueButton.setColorFilter(0);
+                    binding.favIcon.setColorFilter(0);
+                    binding.backArrowIcon.setColorFilter(0);
+                    binding.moreIcon.setColorFilter(0);
+
+                    // change nav bar color
+                    getWindow().setNavigationBarColor(0);
+
+                    // change top bar color
+                    getWindow().setStatusBarColor(0);
+
+                    // change seekbar color
+                    binding.progressBar.getThumb().setColorFilter(0, PorterDuff.Mode.SRC_IN);
+
                 } else {
-                    loadImage();
+                    loadImage(youTubeVideo.getThumbnailURL(), true);
                 }
             }
         });
@@ -158,7 +163,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         System.out.println(youTubeVideo.getThumbnailURL());
 
-        loadImage();
+        loadImage(youTubeVideo.getThumbnailURL(), true);
 
         binding.songTitle.setText(youTubeVideo.getTitle());
         binding.songTitle.setSelected(true);
@@ -167,7 +172,7 @@ public class PlayerActivity extends AppCompatActivity {
         return youTubeVideo;
     }
 
-    private void loadImage() {
+    private void loadImage(String url, Boolean changeBackground) {
         Glide.with(PlayerActivity.this)
                 .asBitmap()
                 .listener(new RequestListener<Bitmap>() {
@@ -187,6 +192,8 @@ public class PlayerActivity extends AppCompatActivity {
                         Palette.Swatch vibrant = palette.getVibrantSwatch();
 
                         if (vibrant != null) {
+                            oldTextColor = binding.playingText.getCurrentTextColor();
+
                             // change background color
                             binding.mainContainer.setBackgroundColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), alpha));
 
@@ -216,13 +223,15 @@ public class PlayerActivity extends AppCompatActivity {
                             binding.progressBar.getThumb().setColorFilter(vibrant.getBodyTextColor(), PorterDuff.Mode.SRC_IN);
 
                             // change image resource
-                            binding.songImage.setImageBitmap(resource);
+                            if (changeBackground) {
+                                binding.songImage.setImageBitmap(resource);
+                            }
                         }
 
                         return true;
                     }
                 })
-                .load(youTubeVideo.getThumbnailURL())
+                .load(url)
                 .into(binding.songImage);
     }
 
@@ -245,47 +254,12 @@ public class PlayerActivity extends AppCompatActivity {
         loadFrames();
         animation.setOneShot(false);
         binding.songImage.setImageDrawable(animation);
-
-        Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.animation1frame1);
-        // TODO arreglar devuelve bitmap vacio
-        Palette palette = Palette.from(bitmap).generate();
-        Palette.Swatch vibrant = palette.getVibrantSwatch();
-
-        //change colors
-        // change background color
-        binding.mainContainer.setBackgroundColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), alpha));
-
-        // change text color
-        binding.songTitle.setTextColor(vibrant.getBodyTextColor());
-        binding.artistName.setTextColor(vibrant.getBodyTextColor());
-        binding.playingText.setTextColor(vibrant.getBodyTextColor());
-
-        // change buttons color
-        binding.playButton.setColorFilter(vibrant.getBodyTextColor());
-        binding.nextButton.setColorFilter(vibrant.getBodyTextColor());
-        binding.previousButton.setColorFilter(vibrant.getBodyTextColor());
-        binding.shuffleButton.setColorFilter(vibrant.getBodyTextColor());
-        binding.loopButton.setColorFilter(vibrant.getBodyTextColor());
-        binding.queueButton.setColorFilter(vibrant.getBodyTextColor());
-        binding.favIcon.setColorFilter(vibrant.getBodyTextColor());
-        binding.backArrowIcon.setColorFilter(vibrant.getBodyTextColor());
-        binding.moreIcon.setColorFilter(vibrant.getBodyTextColor());
-
-        // change nav bar color
-        getWindow().setNavigationBarColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), alpha));
-
-        // change top bar color
-        getWindow().setStatusBarColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), alpha));
-
-        // change seekbar color
-        binding.progressBar.getThumb().setColorFilter(vibrant.getBodyTextColor(), PorterDuff.Mode.SRC_IN);
-
         animation.start();
     }
 
     private void loadFrames() {
         int randomNum = 1 + (int)(Math.random() * 5);
-        String sImage = null;
+        String sImage;
         for (int i = 1; i <= 300; i++) {
             sImage = "animation" + randomNum + "frame";
             animation.addFrame(

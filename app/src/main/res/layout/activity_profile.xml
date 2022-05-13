@@ -68,14 +68,6 @@
                 android:fadingEdge="none"
                 android:scaleType="centerCrop" />
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_alignBottom="@id/backgroundImage"
-                android:foreground="@drawable/gradient"
-                android:requiresFadingEdge="none" />
-
             <ImageView
                 android:id="@+id/profileImage"
                 android:layout_width="100dp"

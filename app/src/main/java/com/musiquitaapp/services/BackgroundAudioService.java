@@ -2,6 +2,7 @@ package com.musiquitaapp.services;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
 
 import com.bumptech.glide.Glide;
@@ -32,12 +34,19 @@ import com.facebook.network.connectionclass.DeviceBandwidthSampler;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.audio.AudioAttributes;
+import com.google.android.exoplayer2.ui.DownloadNotificationHelper;
+import com.google.android.exoplayer2.ui.PlayerNotificationManager;
+import com.google.android.exoplayer2.util.NotificationUtil;
 import com.musiquitaapp.R;
 import com.musiquitaapp.models.Config;
 import com.musiquitaapp.models.ItemType;
 import com.musiquitaapp.models.YouTubeVideo;
 import com.musiquitaapp.screens.media.PlayerActivity;
+
+import java.util.List;
+import java.util.Map;
 
 import at.huber.youtubeExtractor.VideoMeta;
 import at.huber.youtubeExtractor.YouTubeExtractor;
@@ -77,6 +86,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
         //initPhoneCallListener();
         deviceBandwidthSampler = DeviceBandwidthSampler.getInstance();
     }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         handleIntent(intent);
