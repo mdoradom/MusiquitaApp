@@ -11,55 +11,46 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/generalContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:padding="20dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
+            <ImageView
+                android:id="@+id/exitIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
 
-                <RelativeLayout
-                    android:id="@+id/topMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/searchIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_toLeftOf="@id/editIcon"
+                app:srcCompat="@drawable/ic_baseline_search_24" />
 
-                    <ImageView
-                        android:id="@+id/exitIcon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentStart="true"
-                        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
+            <ImageView
+                android:id="@+id/editIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_toLeftOf="@id/shareIcon"
+                app:srcCompat="@drawable/ic_baseline_edit_24" />
 
-                    <ImageView
-                        android:id="@+id/searchIcon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toLeftOf="@id/editIcon"
-                        app:srcCompat="@drawable/ic_baseline_search_24" />
-
-                    <ImageView
-                        android:id="@+id/editIcon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toLeftOf="@id/shareIcon"
-                        app:srcCompat="@drawable/ic_baseline_edit_24" />
-
-                    <ImageView
-                        android:id="@+id/shareIcon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginLeft="10dp"
-                        app:srcCompat="@drawable/ic_baseline_share_24" />
-                </RelativeLayout>
-
-            </RelativeLayout>
+            <ImageView
+                android:id="@+id/shareIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                app:srcCompat="@drawable/ic_baseline_share_24" />
 
             <ImageView
                 android:id="@+id/backgroundImage"
@@ -88,13 +79,12 @@
 
             <TextView
                 android:id="@+id/description"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/userNameText"
                 android:gravity="center"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisis quisque ut laoreet volutpat porttitor sed vel auctor vel. Aliquet tincidunt porta dictum int..." />
+                android:paddingRight="20dp" />
 
             <RelativeLayout
                 android:id="@+id/statsBox"

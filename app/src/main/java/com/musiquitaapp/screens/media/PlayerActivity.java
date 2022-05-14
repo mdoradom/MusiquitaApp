@@ -41,10 +41,12 @@ public class PlayerActivity extends AppCompatActivity {
 
     private ActivityPlayerBinding binding;
     private boolean isChecked = false;
-    private boolean isPlaying = false;
+    private boolean isPlaying = true;
+    private boolean repeat = false;
     private AnimationDrawable animation;
     private YouTubeVideo youTubeVideo;
     private int oldTextColor;
+    private Intent serviceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +59,36 @@ public class PlayerActivity extends AppCompatActivity {
 
         //binding.progressBar.setMax(song.getDuration());
         binding.progressBar.setMax(1000);
+        playSong(song);
+        binding.loopButton.setOnClickListener(v -> {
+            if (!repeat){
+                repeat = true;
+                serviceIntent.setAction(BackgroundAudioService.ACTION_REPEAT_ONE);
+                startService(serviceIntent);
+                rotateAnimation(binding.loopButton);
+                binding.loopButton.setImageResource(R.drawable.ic_baseline_repeat_one_24);
+            }else{
+                repeat = false;
+                serviceIntent.setAction(BackgroundAudioService.ACTION_REPEAT_NONE);
+                startService(serviceIntent);
+                rotateAnimation(binding.loopButton);
+                binding.loopButton.setImageResource(R.drawable.ic_baseline_loop_24);
 
+            }
+        });
         binding.playButton.setOnClickListener(v -> {
-            PlayerActivity.this.playSong(song);
+
+
             if (isPlaying) {
+                isPlaying = false;
+                serviceIntent.setAction(BackgroundAudioService.ACTION_PAUSE);
+                startService(serviceIntent);
                 rotateAnimation(binding.playButton);
                 binding.playButton.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24);
             } else {
+                serviceIntent.setAction(BackgroundAudioService.ACTION_RESUME);
+                startService(serviceIntent);
+                isPlaying = true;
                 binding.playButton.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
             }
         });
@@ -240,7 +265,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void playSong(YouTubeVideo song) {
-        Intent serviceIntent = new Intent(getApplicationContext(), BackgroundAudioService.class);
+        serviceIntent = new Intent(getApplicationContext(), BackgroundAudioService.class);
 
         serviceIntent.setAction(BackgroundAudioService.ACTION_PLAY);
         serviceIntent.putExtra(Config.YOUTUBE_TYPE, ItemType.YOUTUBE_MEDIA_TYPE_VIDEO);
