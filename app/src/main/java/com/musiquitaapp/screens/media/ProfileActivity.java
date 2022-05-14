@@ -99,7 +99,9 @@ public class ProfileActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     Profile profile = documentSnapshot.toObject(Profile.class);
 
-                    binding.description.setText(profile.description);
+                    if (!profile.description.isEmpty()) {
+                        binding.description.setText(profile.description);
+                    }
 
                     Glide.with(ProfileActivity.this).load(profile.backgroundImage)
                             .apply(RequestOptions.bitmapTransform(new BlurTransformation(5, 1)))

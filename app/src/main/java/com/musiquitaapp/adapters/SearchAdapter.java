@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -32,6 +35,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
     private Context mContext;
     private List<Items> mItems;
     private YouTubeVideo videoItem;
+    private int position;
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     public SearchAdapter(List<Items> results, Context applicationContext) {
         this.mContext = applicationContext;
@@ -51,6 +63,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
         holder.titleRow.setText(mItems.get(position).getSnippet().getTitle());
         holder.channelRow.setText(mItems.get(position).getSnippet().getChannelTitle());
         Glide.with(mContext).load(mItems.get(position).getSnippet().getThumbnails().getMedium().getUrl()).fitCenter().into(holder.imageRow);
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                setPosition(holder.getPosition());
+                return false;
+            }
+        });
+
         holder.relativeLayout.setOnClickListener(v -> {
             videoItem = new YouTubeVideo();
             videoItem.setId(mItems.get(position).getId().videoId);
@@ -67,7 +88,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
         return mItems.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         TextView titleRow;
         TextView channelRow;
         ImageView imageRow;
@@ -78,6 +99,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
             channelRow = itemView.findViewById(R.id.ChannelRow);
             imageRow = itemView.findViewById(R.id.imageRow);
             relativeLayout = itemView.findViewById(R.id.vistarelativa);
+
+            itemView.setOnCreateContextMenuListener(this);
+        }
+
+
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.setHeaderTitle("Canción");
+            menu.add(0, R.id.addQueue, 0, "Añadir a Cola");
+            menu.add(0, R.id.addPlaylist, 0, "Añadir a Playlist");
         }
     }
+
 }

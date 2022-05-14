@@ -1,7 +1,10 @@
 package com.musiquitaapp.screens.main;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,12 +38,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class SearchFragment extends Fragment {
 
     private FragmentSearchBinding binding;
     private ArrayList<Items> items;
     private RecyclerView searchRecycler;
+    private SearchAdapter myAdapter;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -47,6 +54,27 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int position = -1;
+        try {
+            position = myAdapter.getPosition();
+        } catch (Exception e) {
+            Log.d(TAG, e.getLocalizedMessage(), e);
+            return super.onContextItemSelected(item);
+        }
+
+        switch (item.getItemId()) {
+            case R.id.addPlaylist:
+                Toast.makeText(getContext(), "Añadir a Playlists", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.addQueue:
+                Toast.makeText(getContext(), "Añadir a Cola", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -75,7 +103,11 @@ public class SearchFragment extends Fragment {
             }
         });
 
+
+
         return view;
+
+
     }
 
     private void searchContent() {
@@ -90,14 +122,12 @@ public class SearchFragment extends Fragment {
 
                         String num_results = response.optString("resultsPerPage");
 
-
                         JSONArray jsonArray = response.optJSONArray("items");
                         List<Items> results = Arrays.asList(new GsonBuilder().create().fromJson(jsonArray.toString(), Items[].class));
 
-                        SearchAdapter myAdapter = new SearchAdapter(results, getContext());
+                        myAdapter = new SearchAdapter(results, getContext());
                         binding.searchRecycler.setAdapter(myAdapter);
                         binding.searchRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-
                     }
                 },
                 new Response.ErrorListener() {
