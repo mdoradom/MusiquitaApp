@@ -45,25 +45,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         setProfileResources();
 
-        binding.profileImage.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getApplicationContext(), new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build());
-
-            googleSignInClient.signOut();
-
-            Intent intent = new Intent(ProfileActivity.this, AuthenticationMethodSelector.class);
-            startActivity(intent);
-        });
-
         binding.exitIcon.setOnClickListener(v -> onBackPressed());
 
         binding.editIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO editar perfil
                 Intent intent = new Intent(ProfileActivity.this, EditProfile.class);
                 startActivity(intent);
             }
@@ -80,6 +66,22 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO compartir perfil
+            }
+        });
+
+        binding.logutIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getApplicationContext(), new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail()
+                        .build());
+
+                googleSignInClient.signOut();
+
+                Intent intent = new Intent(ProfileActivity.this, AuthenticationMethodSelector.class);
+                startActivity(intent);
             }
         });
     }
@@ -99,9 +101,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     Profile profile = documentSnapshot.toObject(Profile.class);
 
-                    if (!profile.description.isEmpty()) {
-                        binding.description.setText(profile.description);
-                    }
+                    binding.description.setText(profile.description);
 
                     Glide.with(ProfileActivity.this).load(profile.backgroundImage)
                             .apply(RequestOptions.bitmapTransform(new BlurTransformation(5, 1)))
@@ -117,6 +117,7 @@ public class ProfileActivity extends AppCompatActivity {
                                     binding.generalContainer.bringChildToFront(binding.editIcon);
                                     binding.generalContainer.bringChildToFront(binding.searchIcon);
                                     binding.generalContainer.bringChildToFront(binding.shareIcon);
+                                    binding.generalContainer.bringChildToFront(binding.logutIcon);
                                     return false;
                                 }
                             })

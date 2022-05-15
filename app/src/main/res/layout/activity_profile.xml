@@ -16,6 +16,15 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/logutIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_toLeftOf="@id/searchIcon"
+                app:srcCompat="@drawable/ic_baseline_logout_24" />
+
+            <ImageView
                 android:id="@+id/exitIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

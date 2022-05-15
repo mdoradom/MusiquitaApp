@@ -6,9 +6,12 @@ import static com.musiquitaapp.youtube.YoutubeSingleton.getCredential;
 import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -26,9 +29,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.musiquitaapp.R;
 import com.musiquitaapp.databinding.FragmentRegisterSelectorBinding;
+import com.musiquitaapp.models.Profile;
 import com.musiquitaapp.screens.BaseFragment;
+
+import java.io.File;
+import java.util.UUID;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -107,7 +116,12 @@ public class RegisterSelector extends BaseFragment {
         FirebaseAuth.getInstance().signInWithCredential(GoogleAuthProvider.getCredential(account.getIdToken(), null))
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
-                        navController.navigate(R.id.action_registerSelector_to_dashboardActivity);
+                        // subir la foto de background a firebase y añadirla a la colección con el UUID del usuario asociado
+                        FirebaseFirestore.getInstance()
+                                .collection("Backgrounds")
+                                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .set(new Profile("https://i.redd.it/afqo1p9az6g71.jpg", ""))
+                                .addOnSuccessListener(unused -> navController.navigate(R.id.action_registerSelector_to_dashboardActivity));
                     } else {
                         // TODO cosas de error de login
                     }

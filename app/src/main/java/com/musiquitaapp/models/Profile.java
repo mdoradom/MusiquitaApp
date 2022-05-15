@@ -17,4 +17,6 @@ public class Profile {
         this.backgroundImage = backgroundImage;
         this.description = description;
     }
+
+
 }
