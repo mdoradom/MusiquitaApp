@@ -1,6 +1,7 @@
 package com.musiquitaapp.screens.login;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 import static com.musiquitaapp.youtube.YoutubeSingleton.getCredential;
 
 import android.Manifest;
@@ -14,6 +15,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +29,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.musiquitaapp.R;
@@ -116,12 +122,25 @@ public class RegisterSelector extends BaseFragment {
         FirebaseAuth.getInstance().signInWithCredential(GoogleAuthProvider.getCredential(account.getIdToken(), null))
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
-                        // subir la foto de background a firebase y añadirla a la colección con el UUID del usuario asociado
-                        FirebaseFirestore.getInstance()
-                                .collection("Backgrounds")
-                                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .set(new Profile("https://i.redd.it/afqo1p9az6g71.jpg", ""))
-                                .addOnSuccessListener(unused -> navController.navigate(R.id.action_registerSelector_to_dashboardActivity));
+
+                        FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+                        DocumentReference docIdRef = rootRef.collection("Backgrounds").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        docIdRef.get().addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                if (task1.getResult().exists()) {
+                                    navController.navigate(R.id.action_registerSelector_to_dashboardActivity);
+                                } else {
+                                    // subir la foto de background a firebase y añadirla a la colección con el UUID del usuario asociado
+                                    FirebaseFirestore.getInstance()
+                                            .collection("Backgrounds")
+                                            .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                            .set(new Profile("https://i.redd.it/afqo1p9az6g71.jpg", ""))
+                                            .addOnSuccessListener(unused -> navController.navigate(R.id.action_registerSelector_to_dashboardActivity));
+                                }
+                            } else {
+                                Log.d(TAG, "Failed with: ", task1.getException());
+                            }
+                        });
                     } else {
                         // TODO cosas de error de login
                     }
