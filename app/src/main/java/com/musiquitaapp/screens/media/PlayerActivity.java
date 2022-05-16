@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -13,8 +14,11 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -28,8 +32,10 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.musiquitaapp.R;
 import com.musiquitaapp.databinding.ActivityPlayerBinding;
+import com.musiquitaapp.databinding.FragmentBottomSheetDialogBinding;
 import com.musiquitaapp.models.Config;
 import com.musiquitaapp.models.ItemType;
 import com.musiquitaapp.models.YouTubeVideo;
@@ -40,6 +46,7 @@ public class PlayerActivity extends AppCompatActivity {
     private int alpha = 200;
 
     private ActivityPlayerBinding binding;
+    private FragmentBottomSheetDialogBinding binding2;
     private boolean isChecked = false;
     private boolean isPlaying = true;
     private boolean repeat = false;
@@ -47,11 +54,13 @@ public class PlayerActivity extends AppCompatActivity {
     private YouTubeVideo youTubeVideo;
     private int oldTextColor;
     private Intent serviceIntent;
+    private Palette.Swatch vibrant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityPlayerBinding.inflate(getLayoutInflater());
+        binding2 = FragmentBottomSheetDialogBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
@@ -60,6 +69,7 @@ public class PlayerActivity extends AppCompatActivity {
         //binding.progressBar.setMax(song.getDuration());
         binding.progressBar.setMax(1000);
         playSong(song);
+
         binding.loopButton.setOnClickListener(v -> {
             if (!repeat){
                 repeat = true;
@@ -76,6 +86,7 @@ public class PlayerActivity extends AppCompatActivity {
 
             }
         });
+
         binding.playButton.setOnClickListener(v -> {
 
 
@@ -133,45 +144,71 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
-        binding.bgSelector.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    loadAnimation();
-                    // change background color
-                    binding.mainContainer.setBackgroundColor(0);
+        binding.bgSelector.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                loadAnimation();
+                // change background color
+                binding.mainContainer.setBackgroundColor(0);
 
-                    // change text color
-                    binding.songTitle.setTextColor(oldTextColor);
-                    binding.artistName.setTextColor(oldTextColor);
-                    binding.playingText.setTextColor(oldTextColor);
+                // change text color
+                binding.songTitle.setTextColor(oldTextColor);
+                binding.artistName.setTextColor(oldTextColor);
+                binding.playingText.setTextColor(oldTextColor);
 
-                    // change buttons color
-                    binding.playButton.setColorFilter(0);
-                    binding.nextButton.setColorFilter(0);
-                    binding.previousButton.setColorFilter(0);
-                    binding.shuffleButton.setColorFilter(0);
-                    binding.loopButton.setColorFilter(0);
-                    binding.queueButton.setColorFilter(0);
-                    binding.favIcon.setColorFilter(0);
-                    binding.backArrowIcon.setColorFilter(0);
-                    binding.moreIcon.setColorFilter(0);
+                // change buttons color
+                binding.playButton.setColorFilter(0);
+                binding.nextButton.setColorFilter(0);
+                binding.previousButton.setColorFilter(0);
+                binding.shuffleButton.setColorFilter(0);
+                binding.loopButton.setColorFilter(0);
+                binding.queueButton.setColorFilter(0);
+                binding.favIcon.setColorFilter(0);
+                binding.backArrowIcon.setColorFilter(0);
+                binding.moreIcon.setColorFilter(0);
 
-                    // change nav bar color
-                    getWindow().setNavigationBarColor(0);
+                // change nav bar color
+                getWindow().setNavigationBarColor(0);
 
-                    // change top bar color
-                    getWindow().setStatusBarColor(0);
+                // change top bar color
+                getWindow().setStatusBarColor(0);
 
-                    // change seekbar color
-                    binding.progressBar.getThumb().setColorFilter(0, PorterDuff.Mode.SRC_IN);
+                // change seekbar color
+                binding.progressBar.getThumb().setColorFilter(0, PorterDuff.Mode.SRC_IN);
 
-                } else {
-                    loadImage(youTubeVideo.getThumbnailURL(), true);
-                }
+                /*
+                // TODO WIP 2 cambiar color dinamico del bottom sheet dialog menu
+                // change bottomSheetDialog color
+                setContentView(binding2.getRoot());
+                binding2.mainContainer.setBackgroundColor(Color.BLACK);
+                binding2.titleQueue.setTextColor(oldTextColor);
+                setContentView(binding.getRoot());
+                 */
+
+            } else {
+                loadImage(youTubeVideo.getThumbnailURL(), true);
             }
         });
 
+        binding.queueButton.setOnClickListener(v -> showBottomSheetDialog());
+
+    }
+
+    private void showBottomSheetDialog() {
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.fragment_bottom_sheet_dialog);
+
+        RelativeLayout relativeLayout = bottomSheetDialog.findViewById(R.id.mainContainer);
+        TextView textView = bottomSheetDialog.findViewById(R.id.titleQueue);
+
+        /*
+        // TODO WIP 2 cambiar color dinamico del bottom sheet dialog menu
+        if (vibrant != null) {
+            relativeLayout.setBackgroundColor(ColorUtils.setAlphaComponent(vibrant.getRgb(), 255));
+            textView.setTextColor(vibrant.getBodyTextColor());
+        }
+        */
+
+        bottomSheetDialog.show();
     }
 
     private void rotateAnimation(ImageView imageView) {
@@ -214,7 +251,7 @@ public class PlayerActivity extends AppCompatActivity {
                     public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                         isPlaying = true;
                         Palette palette = Palette.from(resource).generate();
-                        Palette.Swatch vibrant = palette.getVibrantSwatch();
+                        vibrant = palette.getVibrantSwatch();
 
                         if (vibrant != null) {
                             oldTextColor = binding.playingText.getCurrentTextColor();
@@ -251,6 +288,9 @@ public class PlayerActivity extends AppCompatActivity {
                             if (changeBackground) {
                                 binding.songImage.setImageBitmap(resource);
                             }
+
+                            // change bottomSheetDialog color
+                            //changeColorsDynamically(vibrant);
                         }
 
                         return true;
