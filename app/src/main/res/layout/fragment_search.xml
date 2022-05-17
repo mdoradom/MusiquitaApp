@@ -12,11 +12,19 @@
 
     <com.mancj.materialsearchbar.MaterialSearchBar
         android:id="@+id/searchbar"
+        style="@style/MaterialSearchBarDark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        app:mt_backIconTint="@color/md_theme_dark_inversePrimary"
+        app:mt_clearIconTint="@color/md_theme_dark_inversePrimary"
+        app:mt_dividerColor="@color/md_theme_dark_onPrimaryContainer"
+        app:mt_highlightedTextColor="@color/md_theme_dark_onPrimary"
         app:mt_hint="Buscar..."
-        app:mt_placeholder="Buscar...">
+        app:mt_menuIconTint="@color/md_theme_dark_inversePrimary"
+        app:mt_navIconTint="@color/md_theme_dark_inversePrimary"
+        app:mt_placeholder="Buscar..."
+        app:mt_searchIconTint="@color/md_theme_dark_inversePrimary">
 
     </com.mancj.materialsearchbar.MaterialSearchBar>
 

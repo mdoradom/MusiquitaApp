@@ -43,6 +43,7 @@ import com.musiquitaapp.databinding.FragmentBottomSheetDialogBinding;
 import com.musiquitaapp.models.Config;
 import com.musiquitaapp.models.ItemType;
 import com.musiquitaapp.models.YouTubeVideo;
+import com.musiquitaapp.services.Animations;
 import com.musiquitaapp.services.BackgroundAudioService;
 
 import org.checkerframework.checker.units.qual.A;
@@ -51,6 +52,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private int alpha = 200;
 
+    private Animations animations = new Animations();
     private ActivityPlayerBinding binding;
     private FragmentBottomSheetDialogBinding binding2;
     private boolean isChecked = false;
@@ -82,13 +84,13 @@ public class PlayerActivity extends AppCompatActivity {
                 repeat = true;
                 serviceIntent.setAction(BackgroundAudioService.ACTION_REPEAT_ONE);
                 startService(serviceIntent);
-                clickAnimation(binding.loopButton);
+                animations.clickAnimation(binding.loopButton);
                 binding.loopButton.setImageResource(R.drawable.ic_baseline_repeat_one_24);
             } else {
                 repeat = false;
                 serviceIntent.setAction(BackgroundAudioService.ACTION_REPEAT_NONE);
                 startService(serviceIntent);
-                clickAnimation(binding.loopButton);
+                animations.clickAnimation(binding.loopButton);
                 binding.loopButton.setImageResource(R.drawable.ic_baseline_loop_24);
 
             }
@@ -99,7 +101,7 @@ public class PlayerActivity extends AppCompatActivity {
                 isPlaying = false;
                 serviceIntent.setAction(BackgroundAudioService.ACTION_PAUSE);
                 startService(serviceIntent);
-                clickAnimation(binding.playButton);
+                animations.clickAnimation(binding.playButton);
                 binding.playButton.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24);
             } else {
                 serviceIntent.setAction(BackgroundAudioService.ACTION_RESUME);
@@ -109,11 +111,11 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
-        binding.nextButton.setOnClickListener(v -> clickAnimation(binding.nextButton));
+        binding.nextButton.setOnClickListener(v -> animations.clickAnimation(binding.nextButton));
 
-        binding.previousButton.setOnClickListener(v -> clickAnimation(binding.previousButton));
+        binding.previousButton.setOnClickListener(v -> animations.clickAnimation(binding.previousButton));
 
-        binding.shuffleButton.setOnClickListener(v -> clickAnimation(binding.shuffleButton));
+        binding.shuffleButton.setOnClickListener(v -> animations.clickAnimation(binding.shuffleButton));
 
         binding.progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -148,11 +150,11 @@ public class PlayerActivity extends AppCompatActivity {
         binding.favIcon.setOnClickListener(v -> {
             if (isChecked) {
                 binding.favIcon.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                clickAnimation(binding.favIcon);
+                animations.clickAnimation(binding.favIcon);
                 isChecked = false;
             } else {
                 binding.favIcon.setImageResource(R.drawable.ic_baseline_favorite_24);
-                clickAnimation(binding.favIcon);
+                animations.clickAnimation(binding.favIcon);
                 isChecked = true;
             }
         });
@@ -203,7 +205,7 @@ public class PlayerActivity extends AppCompatActivity {
         });
 
         binding.queueButton.setOnClickListener(v -> {
-            clickAnimation(binding.queueButton);
+            animations.clickAnimation(binding.queueButton);
             showBottomSheetDialog();
         });
     }
@@ -224,29 +226,6 @@ public class PlayerActivity extends AppCompatActivity {
         */
 
         bottomSheetDialog.show();
-    }
-
-    private void clickAnimation(ImageView imageView) {
-
-        ObjectAnimator animation1 = ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 0.8f);
-        ObjectAnimator animation2 = ObjectAnimator.ofFloat(imageView, "scaleY", 1f, 0.8f);
-
-        ObjectAnimator animation3 = ObjectAnimator.ofFloat(imageView, "scaleX", 0.8f, 1f);
-        ObjectAnimator animation4 = ObjectAnimator.ofFloat(imageView, "scaleY", 0.8f, 1f);
-
-        int duration = 175;
-
-        animation1.setDuration(duration);
-        animation2.setDuration(duration);
-
-        animation3.setStartDelay(duration);
-        animation4.setStartDelay(duration);
-        animation3.setDuration(duration);
-        animation4.setDuration(duration);
-
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(animation1, animation2, animation3, animation4);
-        animatorSet.start();
     }
 
     private YouTubeVideo startService() {

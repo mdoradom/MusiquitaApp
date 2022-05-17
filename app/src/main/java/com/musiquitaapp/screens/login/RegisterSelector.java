@@ -79,26 +79,11 @@ public class RegisterSelector extends BaseFragment {
 
         firebaseAuthWithGoogle(GoogleSignIn.getLastSignedInAccount(requireContext()));
 
-        binding.buttonGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signInClient.launch(googleSignInClient.getSignInIntent());
-            }
-        });
+        binding.buttonGoogle.setOnClickListener(v -> signInClient.launch(googleSignInClient.getSignInIntent()));
 
-        binding.buttonEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.action_registerSelector_to_createAccount);
-            }
-        });
+        binding.buttonEmail.setOnClickListener(v -> navController.navigate(R.id.action_registerSelector_to_createAccount));
 
-        binding.buttonLogIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.action_registerSelector_to_login);
-            }
-        });
+        binding.buttonLogIn.setOnClickListener(v -> navController.navigate(R.id.action_registerSelector_to_login));
 
         return view;
     }

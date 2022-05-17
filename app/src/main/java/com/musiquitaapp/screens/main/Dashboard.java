@@ -17,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.musiquitaapp.R;
 import com.musiquitaapp.databinding.ActivityDashboardBinding;
+import com.musiquitaapp.services.Animations;
 
 public class Dashboard extends AppCompatActivity {
 
@@ -24,6 +25,7 @@ public class Dashboard extends AppCompatActivity {
     NavHostFragment navHostFragment;
 
     private ActivityDashboardBinding binding;
+    private Animations animations = new Animations();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +53,15 @@ public class Dashboard extends AppCompatActivity {
             }
         });
 
-        binding.profileIcon.setOnClickListener(v -> navController.navigate(R.id.profileActivity));
+        binding.profileIcon.setOnClickListener(v -> {
+            animations.clickAnimation(binding.profileIcon);
+            navController.navigate(R.id.profileActivity);
+        });
 
-        binding.connectIcon.setOnClickListener(v -> navController.navigate(R.id.connectActivity));
+        binding.connectIcon.setOnClickListener(v -> {
+                animations.clickAnimation(binding.connectIcon);
+                navController.navigate(R.id.connectActivity);
+        });
     }
 
 }

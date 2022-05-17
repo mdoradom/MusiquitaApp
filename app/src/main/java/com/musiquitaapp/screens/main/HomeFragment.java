@@ -37,17 +37,6 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        binding.followerArtistText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Intent TEMPORAL!!! de dashboard a reproductor
-                Intent intent = new Intent(getActivity(), PlayerActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // TODO HomeFragment cosas
-
         return view;
     }
 }

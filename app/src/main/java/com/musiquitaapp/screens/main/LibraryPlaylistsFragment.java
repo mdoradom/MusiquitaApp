@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.musiquitaapp.R;
+import com.musiquitaapp.databinding.FragmentLibraryArtistsBinding;
 import com.musiquitaapp.databinding.FragmentLibraryPlaylistsBinding;
 
 public class LibraryPlaylistsFragment extends Fragment {
@@ -28,23 +29,10 @@ public class LibraryPlaylistsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_library_playlists, container, false);
-    }
+        binding = FragmentLibraryPlaylistsBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-    private void searchPlaylists() {
-
-    }
-
-    private void createPlaylist() {
-
-    }
-
-    private void removePlaylist() {
-
-    }
-
-    private void editPlaylist() {
-
+        return view;
     }
 
 }

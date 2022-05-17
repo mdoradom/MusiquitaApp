@@ -27,6 +27,7 @@ import com.musiquitaapp.R;
 import com.musiquitaapp.databinding.ActivityProfileBinding;
 import com.musiquitaapp.models.Profile;
 import com.musiquitaapp.screens.login.AuthenticationMethodSelector;
+import com.musiquitaapp.services.Animations;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
@@ -34,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ActivityProfileBinding binding;
     private NavController navController;
+    private Animations animations = new Animations();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
         binding.editIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                animations.clickAnimation(binding.editIcon);
                 Intent intent = new Intent(ProfileActivity.this, EditProfile.class);
                 startActivity(intent);
             }
@@ -58,6 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
         binding.searchIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                animations.clickAnimation(binding.searchIcon);
                 // TODO buscar perfil
             }
         });
@@ -65,6 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
         binding.shareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                animations.clickAnimation(binding.shareIcon);
                 // TODO compartir perfil
             }
         });
@@ -72,6 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
         binding.logutIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                animations.clickAnimation(binding.logutIcon);
                 FirebaseAuth.getInstance().signOut();
                 GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getApplicationContext(), new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestIdToken(getString(R.string.default_web_client_id))

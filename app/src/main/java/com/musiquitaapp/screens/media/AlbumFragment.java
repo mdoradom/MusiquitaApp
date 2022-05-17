@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.musiquitaapp.R;
 import com.musiquitaapp.databinding.FragmentAlbumBinding;
+import com.musiquitaapp.databinding.FragmentLibraryPlaylistsBinding;
 
 public class AlbumFragment extends Fragment {
 
@@ -28,7 +29,8 @@ public class AlbumFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_album, container, false);
+        binding = FragmentAlbumBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         return view;
     }
