@@ -1,13 +1,10 @@
 # README WIP
 
-<div align="center">
-  ![Logo]()
+![Logo]()
 
-  # Musiquita App
+# Musiquita App
 
-  Descripción
-  
-<div>
+Descripción
 
 ## Badges
 
