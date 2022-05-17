@@ -1,5 +1,7 @@
 package com.musiquitaapp.screens.media;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,8 +12,10 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,6 +45,8 @@ import com.musiquitaapp.models.ItemType;
 import com.musiquitaapp.models.YouTubeVideo;
 import com.musiquitaapp.services.BackgroundAudioService;
 
+import org.checkerframework.checker.units.qual.A;
+
 public class PlayerActivity extends AppCompatActivity {
 
     private int alpha = 200;
@@ -49,6 +55,7 @@ public class PlayerActivity extends AppCompatActivity {
     private FragmentBottomSheetDialogBinding binding2;
     private boolean isChecked = false;
     private boolean isPlaying = true;
+    private boolean isLooped = false;
     private boolean repeat = false;
     private AnimationDrawable animation;
     private YouTubeVideo youTubeVideo;
@@ -71,30 +78,28 @@ public class PlayerActivity extends AppCompatActivity {
         playSong(song);
 
         binding.loopButton.setOnClickListener(v -> {
-            if (!repeat){
+            if (!repeat) {
                 repeat = true;
                 serviceIntent.setAction(BackgroundAudioService.ACTION_REPEAT_ONE);
                 startService(serviceIntent);
-                rotateAnimation(binding.loopButton);
+                clickAnimation(binding.loopButton);
                 binding.loopButton.setImageResource(R.drawable.ic_baseline_repeat_one_24);
-            }else{
+            } else {
                 repeat = false;
                 serviceIntent.setAction(BackgroundAudioService.ACTION_REPEAT_NONE);
                 startService(serviceIntent);
-                rotateAnimation(binding.loopButton);
+                clickAnimation(binding.loopButton);
                 binding.loopButton.setImageResource(R.drawable.ic_baseline_loop_24);
 
             }
         });
 
         binding.playButton.setOnClickListener(v -> {
-
-
             if (isPlaying) {
                 isPlaying = false;
                 serviceIntent.setAction(BackgroundAudioService.ACTION_PAUSE);
                 startService(serviceIntent);
-                rotateAnimation(binding.playButton);
+                clickAnimation(binding.playButton);
                 binding.playButton.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24);
             } else {
                 serviceIntent.setAction(BackgroundAudioService.ACTION_RESUME);
@@ -103,6 +108,12 @@ public class PlayerActivity extends AppCompatActivity {
                 binding.playButton.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
             }
         });
+
+        binding.nextButton.setOnClickListener(v -> clickAnimation(binding.nextButton));
+
+        binding.previousButton.setOnClickListener(v -> clickAnimation(binding.previousButton));
+
+        binding.shuffleButton.setOnClickListener(v -> clickAnimation(binding.shuffleButton));
 
         binding.progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -137,9 +148,11 @@ public class PlayerActivity extends AppCompatActivity {
         binding.favIcon.setOnClickListener(v -> {
             if (isChecked) {
                 binding.favIcon.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                clickAnimation(binding.favIcon);
                 isChecked = false;
             } else {
                 binding.favIcon.setImageResource(R.drawable.ic_baseline_favorite_24);
+                clickAnimation(binding.favIcon);
                 isChecked = true;
             }
         });
@@ -189,8 +202,10 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
-        binding.queueButton.setOnClickListener(v -> showBottomSheetDialog());
-
+        binding.queueButton.setOnClickListener(v -> {
+            clickAnimation(binding.queueButton);
+            showBottomSheetDialog();
+        });
     }
 
     private void showBottomSheetDialog() {
@@ -211,11 +226,27 @@ public class PlayerActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
-    private void rotateAnimation(ImageView imageView) {
-        RotateAnimation anim = new RotateAnimation(0.0f, 180.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        anim.setInterpolator(new LinearInterpolator());
-        anim.setDuration(500);
-        imageView.startAnimation(anim);
+    private void clickAnimation(ImageView imageView) {
+
+        ObjectAnimator animation1 = ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 0.8f);
+        ObjectAnimator animation2 = ObjectAnimator.ofFloat(imageView, "scaleY", 1f, 0.8f);
+
+        ObjectAnimator animation3 = ObjectAnimator.ofFloat(imageView, "scaleX", 0.8f, 1f);
+        ObjectAnimator animation4 = ObjectAnimator.ofFloat(imageView, "scaleY", 0.8f, 1f);
+
+        int duration = 175;
+
+        animation1.setDuration(duration);
+        animation2.setDuration(duration);
+
+        animation3.setStartDelay(duration);
+        animation4.setStartDelay(duration);
+        animation3.setDuration(duration);
+        animation4.setDuration(duration);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animation1, animation2, animation3, animation4);
+        animatorSet.start();
     }
 
     private YouTubeVideo startService() {
