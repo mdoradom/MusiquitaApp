@@ -31,6 +31,8 @@ import com.musiquitaapp.adapters.SearchAdapter;
 import com.musiquitaapp.databinding.FragmentSearchBinding;
 import com.musiquitaapp.models.Config;
 import com.musiquitaapp.models.Items;
+import com.musiquitaapp.models.YouTubeVideo;
+import com.musiquitaapp.youtube.YTApplication;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,6 +48,8 @@ public class SearchFragment extends Fragment {
     private ArrayList<Items> items;
     private RecyclerView searchRecycler;
     private SearchAdapter myAdapter;
+    private List<Items> results;
+    private YouTubeVideo videoItem;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -71,6 +75,14 @@ public class SearchFragment extends Fragment {
                 Toast.makeText(getContext(), "Añadir a Playlists", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.addQueue:
+                videoItem = new YouTubeVideo();
+                //TODO hay que convertir el tiempo que nos da yt (PT3M22S) a segundos
+                videoItem.setDuration("");
+                videoItem.setId(results.get(position).getId().videoId);
+                videoItem.setTitle(results.get(position).getSnippet().getTitle());
+                videoItem.setThumbnailURL(results.get(position).getSnippet().getThumbnails().getHigh().getUrl());
+                videoItem.setAuthor(results.get(position).getSnippet().getChannelTitle());
+                YTApplication.getMediaItems().add(videoItem);
                 Toast.makeText(getContext(), "Añadir a Cola", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -102,41 +114,27 @@ public class SearchFragment extends Fragment {
 
             }
         });
-
-
-
         return view;
-
-
     }
 
     private void searchContent() {
         RequestQueue queue = Volley.newRequestQueue(getContext());
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                Config.YOUTUBE_QUERY_VIDEO + binding.searchbar.getText() + Config.YOUTUBE_QUERY_VIDEO_2 + Config.YOUTUBE_API_KEY,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        String num_results = response.optString("resultsPerPage");
-
-                        JSONArray jsonArray = response.optJSONArray("items");
-                        List<Items> results = Arrays.asList(new GsonBuilder().create().fromJson(jsonArray.toString(), Items[].class));
-
-                        myAdapter = new SearchAdapter(results, getContext());
-                        binding.searchRecycler.setAdapter(myAdapter);
-                        binding.searchRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("tag", "onErrorResponse: " + error.getMessage());
-                    }
-                }
-        );
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Config.YOUTUBE_QUERY_VIDEO + binding.searchbar.getText() + Config.YOUTUBE_QUERY_VIDEO_2 + Config.YOUTUBE_API_KEY, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String num_results = response.optString("resultsPerPage");
+                JSONArray jsonArray = response.optJSONArray("items");
+                results = Arrays.asList(new GsonBuilder().create().fromJson(jsonArray.toString(), Items[].class));
+                myAdapter = new SearchAdapter(results, SearchFragment.this.getContext());
+                binding.searchRecycler.setAdapter(myAdapter);
+                binding.searchRecycler.setLayoutManager(new LinearLayoutManager(SearchFragment.this.getContext()));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("tag", "onErrorResponse: " + error.getMessage());
+            }
+        });
         queue.add(jsonObjectRequest);
     }
 }

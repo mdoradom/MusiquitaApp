@@ -9,6 +9,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.musiquitaapp.R;
 import com.musiquitaapp.databinding.ActivityDashboardBinding;
+import com.musiquitaapp.screens.media.PlayerActivity;
 import com.musiquitaapp.services.Animations;
+import com.musiquitaapp.youtube.YTApplication;
 
 public class Dashboard extends AppCompatActivity {
 
@@ -36,6 +39,7 @@ public class Dashboard extends AppCompatActivity {
 
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_frame);
         navController  = navHostFragment.getNavController();
+        YTApplication.getOurInstance();
 
         binding.mainNav.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -50,6 +54,13 @@ public class Dashboard extends AppCompatActivity {
                     return true;
                 default:
                     return false;
+            }
+        });
+
+        binding.logo.setOnClickListener(v ->{
+            if (YTApplication.getMediaItems().size() > 0){
+                Intent intent = new Intent(this, PlayerActivity.class);
+                startActivity(intent);
             }
         });
 

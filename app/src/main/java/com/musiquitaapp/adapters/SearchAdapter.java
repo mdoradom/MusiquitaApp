@@ -1,14 +1,9 @@
 package com.musiquitaapp.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcelable;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,26 +11,30 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.musiquitaapp.R;
 import com.musiquitaapp.models.Config;
-import com.musiquitaapp.models.ItemType;
 import com.musiquitaapp.models.Items;
 import com.musiquitaapp.models.YouTubeVideo;
-import com.musiquitaapp.screens.media.PlayerActivity;
-import com.musiquitaapp.services.BackgroundAudioService;
+import com.musiquitaapp.youtube.YTApplication;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHolder>{
     private Context mContext;
     private List<Items> mItems;
     private YouTubeVideo videoItem;
     private int position;
+    private String time;
 
     public int getPosition() {
         return position;
@@ -73,13 +72,44 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
         });
 
         holder.relativeLayout.setOnClickListener(v -> {
+            YTApplication.getMediaItems().clear();
+            RequestQueue queue = Volley.newRequestQueue(mContext);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    Config.YOUTUBE_GET_TIME + mItems.get(position).getId().videoId + Config.YOUTUBE_GET_TIME_2 + Config.YOUTUBE_API_KEY,
+                    null,
+                    response -> {
+                        //TODO el response.optString no coje la duración bien porque
+                        // k;fjvertsdjkgnbsretkhnsjkrethn está como muy dentro del json (creo)
+                        time = response.optString("duration");
+
+                        System.out.println(time);
+                        Pattern pattern = Pattern.compile("P(\\d+D)?T(\\d+H)?(\\d+M)?(\\d+S)?", Pattern.CASE_INSENSITIVE);
+                        Matcher m = pattern.matcher(time);
+
+                        if (m.find( )) {
+                            System.out.println("Found value D: " + m.group(0) );
+                            System.out.println("Found value H: " + m.group(1) );
+                            System.out.println("Found value M: " + m.group(2) );
+                            System.out.println("Found value S: " + m.group(3) );
+                        } else {
+                            System.out.println("NO MATCH");
+                        }
+                    },
+                    error -> Log.d("tag", "onErrorResponse: " + error.getMessage())
+            );
+
+            queue.add(jsonObjectRequest);
             videoItem = new YouTubeVideo();
+            //TODO hay que convertir el tiempo que nos da yt (PT3M22S) a segundos
+            videoItem.setDuration(time);
             videoItem.setId(mItems.get(position).getId().videoId);
             videoItem.setTitle(mItems.get(position).getSnippet().getTitle());
             videoItem.setThumbnailURL(mItems.get(position).getSnippet().getThumbnails().getHigh().getUrl());
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("song", videoItem);
-            Navigation.createNavigateOnClickListener(R.id.action_searchFragment_to_playerActivity, bundle).onClick(v);
+            videoItem.setAuthor(mItems.get(position).getSnippet().getChannelTitle());
+            YTApplication.getMediaItems().add(videoItem);
+            YTApplication.getPos().setValue(0);
+            Navigation.createNavigateOnClickListener(R.id.action_searchFragment_to_playerActivity).onClick(v);
         });
     }
 

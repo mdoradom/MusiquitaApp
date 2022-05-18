@@ -22,4 +22,7 @@ public final class Config {
 
     public static final long NUMBER_OF_VIDEOS_RETURNED = 30; //due to YouTube API rules - MAX 50
 
+    public static final String YOUTUBE_GET_TIME = "https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=";
+    public static final String YOUTUBE_GET_TIME_2 = "&key=";
+
 }

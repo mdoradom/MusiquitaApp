@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnticipateOvershootInterpolator;
@@ -29,7 +30,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.lifecycle.Observer;
 import androidx.palette.graphics.Palette;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -38,6 +41,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.musiquitaapp.R;
+import com.musiquitaapp.adapters.SongAdapter;
 import com.musiquitaapp.databinding.ActivityPlayerBinding;
 import com.musiquitaapp.databinding.FragmentBottomSheetDialogBinding;
 import com.musiquitaapp.models.Config;
@@ -45,6 +49,7 @@ import com.musiquitaapp.models.ItemType;
 import com.musiquitaapp.models.YouTubeVideo;
 import com.musiquitaapp.services.Animations;
 import com.musiquitaapp.services.BackgroundAudioService;
+import com.musiquitaapp.youtube.YTApplication;
 
 import org.checkerframework.checker.units.qual.A;
 
@@ -65,19 +70,38 @@ public class PlayerActivity extends AppCompatActivity {
     private Intent serviceIntent;
     private Palette.Swatch vibrant;
 
+    private SongAdapter songAdapter;
+
+    private Boolean firstClick = true;
+
+    private BottomSheetDialog bottomSheetDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityPlayerBinding.inflate(getLayoutInflater());
         binding2 = FragmentBottomSheetDialogBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
+        setContentView(binding.getRoot());
+        bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(binding2.getRoot());
 
-        YouTubeVideo song = startService();
+        YTApplication.getPos().observe(this, integer -> {
+            youTubeVideo = YTApplication.getMediaItems().get(YTApplication.getPos().getValue());
+
+            System.out.println(youTubeVideo.getThumbnailURL());
+
+            loadImage(youTubeVideo.getThumbnailURL(), true);
+
+            binding.songTitle.setText(youTubeVideo.getTitle());
+            binding.songTitle.setSelected(true);
+            binding.songLenght.setText(youTubeVideo.getDuration());
+        });
+
+        startService();
 
         //binding.progressBar.setMax(song.getDuration());
         binding.progressBar.setMax(1000);
-        playSong(song);
+        playSong();
 
         binding.loopButton.setOnClickListener(v -> {
             if (!repeat) {
@@ -111,9 +135,17 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
-        binding.nextButton.setOnClickListener(v -> animations.clickAnimation(binding.nextButton));
+        binding.nextButton.setOnClickListener(v -> {
+            animations.clickAnimation(binding.nextButton);
+            serviceIntent.setAction(BackgroundAudioService.ACTION_NEXT);
+            startService(serviceIntent);
+        });
 
-        binding.previousButton.setOnClickListener(v -> animations.clickAnimation(binding.previousButton));
+        binding.previousButton.setOnClickListener(v -> {
+            animations.clickAnimation(binding.previousButton);
+            serviceIntent.setAction(BackgroundAudioService.ACTION_PREVIOUS);
+            startService(serviceIntent);
+        });
 
         binding.shuffleButton.setOnClickListener(v -> animations.clickAnimation(binding.shuffleButton));
 
@@ -211,12 +243,6 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void showBottomSheetDialog() {
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
-        bottomSheetDialog.setContentView(R.layout.fragment_bottom_sheet_dialog);
-
-        RelativeLayout relativeLayout = bottomSheetDialog.findViewById(R.id.mainContainer);
-        TextView textView = bottomSheetDialog.findViewById(R.id.titleQueue);
-
         /*
         // TODO WIP 2 cambiar color dinamico del bottom sheet dialog menu
         if (vibrant != null) {
@@ -226,12 +252,14 @@ public class PlayerActivity extends AppCompatActivity {
         */
 
         bottomSheetDialog.show();
+
+        songAdapter = new SongAdapter(YTApplication.getMediaItems(), getApplicationContext());
+        binding2.recyclerQueue.setAdapter(songAdapter);
+        binding2.recyclerQueue.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }
 
-    private YouTubeVideo startService() {
-        Bundle bundle = getIntent().getExtras();
-
-        youTubeVideo = (YouTubeVideo) bundle.getSerializable("song");
+    private void startService() {
+        youTubeVideo = YTApplication.getMediaItems().get(YTApplication.getPos().getValue());
 
         System.out.println(youTubeVideo.getThumbnailURL());
 
@@ -239,9 +267,8 @@ public class PlayerActivity extends AppCompatActivity {
 
         binding.songTitle.setText(youTubeVideo.getTitle());
         binding.songTitle.setSelected(true);
+        binding.artistName.setText(youTubeVideo.getAuthor());
         binding.songLenght.setText(youTubeVideo.getDuration());
-
-        return youTubeVideo;
     }
 
     private void loadImage(String url, Boolean changeBackground) {
@@ -314,12 +341,12 @@ public class PlayerActivity extends AppCompatActivity {
         binding.progressBar.setMax(1/*song.getDuration()*/); // necesito int (es double)
     }
 
-    private void playSong(YouTubeVideo song) {
+    private void playSong() {
         serviceIntent = new Intent(getApplicationContext(), BackgroundAudioService.class);
 
         serviceIntent.setAction(BackgroundAudioService.ACTION_PLAY);
-        serviceIntent.putExtra(Config.YOUTUBE_TYPE, ItemType.YOUTUBE_MEDIA_TYPE_VIDEO);
-        serviceIntent.putExtra(Config.YOUTUBE_TYPE_VIDEO, song);
+        serviceIntent.putExtra(Config.YOUTUBE_TYPE, ItemType.YOUTUBE_MEDIA_TYPE_PLAYLIST);
+        serviceIntent.putExtra(Config.YOUTUBE_TYPE_PLAYLIST, YTApplication.getMediaItems());
 
         getApplicationContext().startService(serviceIntent);
     }

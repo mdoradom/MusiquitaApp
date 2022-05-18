@@ -8,6 +8,7 @@ public class YouTubeVideo implements Serializable {
     private String thumbnailURL;
     private String duration;
     private String viewCount;
+    private String author;
 
     public YouTubeVideo() {
         this.id = "";
@@ -15,6 +16,7 @@ public class YouTubeVideo implements Serializable {
         this.thumbnailURL = "";
         this.duration = "";
         this.viewCount = "";
+        this.author = "";
     }
 
     public YouTubeVideo(YouTubeVideo newVideo) {
@@ -23,14 +25,24 @@ public class YouTubeVideo implements Serializable {
         this.thumbnailURL = newVideo.thumbnailURL;
         this.duration = newVideo.duration;
         this.viewCount = newVideo.viewCount;
+        this.author = newVideo.author;
     }
 
-    public YouTubeVideo(String id, String title, String thumbnailURL, String duration, String viewCount) {
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public YouTubeVideo(String id, String title, String thumbnailURL, String duration, String viewCount, String author) {
         this.id = id;
         this.title = title;
         this.thumbnailURL = thumbnailURL;
         this.duration = duration;
         this.viewCount = viewCount;
+        this.author = author;
     }
 
     public String getId() {

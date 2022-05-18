@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/playlistImage"
+        android:id="@+id/songImage"
         android:layout_width="64dp"
         android:layout_height="64dp"
         app:srcCompat="@drawable/animation1frame1" />
@@ -17,36 +17,36 @@
         android:layout_centerHorizontal="false"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/playlistImage">
+        android:layout_toRightOf="@id/songImage">
 
         <TextView
-            android:id="@+id/playlistName"
+            android:id="@+id/songName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/playlistAuthor"
+            android:id="@+id/songAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/playlistName"
+            android:layout_below="@id/songName"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/textSeparator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/playlistName"
+            android:layout_below="@id/songName"
             android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/playlistName"
+            android:layout_toRightOf="@id/songName"
             android:text="•" />
 
         <TextView
-            android:id="@+id/playlistLenght"
+            android:id="@+id/songLenght"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/playlistName"
+            android:layout_below="@id/songName"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/textSeparator"
             android:text="TextView" />
