@@ -45,16 +45,11 @@ public class LibraryPlaylistsFragment extends Fragment {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-
-        // AAAAAAAAAAAAAAAAAA
-        playlistController.getAllUserPlaylistsByUUID(user.getUid(), new PlaylistController.FirestoreCallback() {
-            @Override
-            public void onCallback (List<PlayListFirebase> list) {
-                List<PlayListFirebase> playListFirebases = list;
-                playlistAdapter = new PlaylistAdapter(playListFirebases, getContext());
-                binding.playlistRecycler.setAdapter(playlistAdapter);
-                binding.playlistRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-            }
+        playlistController.getAllUserPlaylistsByUUID(user.getUid(), list -> {
+            List<PlayListFirebase> playListFirebases = list;
+            playlistAdapter = new PlaylistAdapter(playListFirebases, getContext());
+            binding.playlistRecycler.setAdapter(playlistAdapter);
+            binding.playlistRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         });
 
         //binding.textView.setText(playlistController.getAllUserPlaylistsByUUID(user.getUid()).size());
