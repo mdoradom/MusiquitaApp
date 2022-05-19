@@ -1,6 +1,7 @@
 package com.musiquitaapp.models;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class YouTubeVideo implements Serializable {
     private String id;
@@ -91,5 +92,18 @@ public class YouTubeVideo implements Serializable {
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        YouTubeVideo that = (YouTubeVideo) o;
+        return id.equals(that.id) && title.equals(that.title) && Objects.equals(thumbnailURL, that.thumbnailURL) && Objects.equals(duration, that.duration) && Objects.equals(viewCount, that.viewCount) && Objects.equals(author, that.author);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, thumbnailURL, duration, viewCount, author);
     }
 }

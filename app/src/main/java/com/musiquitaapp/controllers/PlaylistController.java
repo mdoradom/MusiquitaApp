@@ -15,6 +15,7 @@ import com.musiquitaapp.models.YouTubeVideo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PlaylistController {
 
@@ -118,30 +119,26 @@ public class PlaylistController {
     public void addSongToPlaylist(YouTubeVideo song, String playlistID){
         FirebaseFirestore.getInstance()
                 .collection("Playlists")
-                .whereEqualTo("playlistID", playlistID)
-                .addSnapshotListener((value, error) -> {
-                    value.getDocuments().get(0).getReference()
-                            .get()
-                            .addOnSuccessListener(documentSnapshot ->
-                                    myPlaylist = documentSnapshot.toObject(PlayListFirebase.class));
-                    myPlaylist.songs.add(song);
-                    value.getDocuments().get(0).getReference()
-                            .set(myPlaylist);
+                .document(playlistID)
+                .get()
+                .addOnCompleteListener(task -> {
+                    myPlaylist = task.getResult().toObject(PlayListFirebase.class);
+                    if(!myPlaylist.songs.contains(song)){
+                        myPlaylist.songs.add(song);
+                    }
+                    task.getResult().getReference().set(myPlaylist);
                 });
     }
 
     public void removeSong(YouTubeVideo song, String playlistID){
         FirebaseFirestore.getInstance()
                 .collection("Playlists")
-                .whereEqualTo("playlistID", playlistID)
-                .addSnapshotListener((value, error) -> {
-                    value.getDocuments().get(0).getReference()
-                            .get()
-                            .addOnSuccessListener(documentSnapshot ->
-                                    myPlaylist = documentSnapshot.toObject(PlayListFirebase.class));
+                .document(playlistID)
+                .get()
+                .addOnCompleteListener(task -> {
+                    myPlaylist = task.getResult().toObject(PlayListFirebase.class);
                     myPlaylist.songs.remove(song);
-                    value.getDocuments().get(0).getReference()
-                            .set(myPlaylist);
+                    task.getResult().getReference().set(myPlaylist);
                 });
     }
 }

@@ -7,10 +7,21 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <TextView
+        android:id="@+id/createPlaylist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:text="Crear playlist"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/playlistRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/createPlaylist"
         android:layout_marginTop="10dp" />
 
 </RelativeLayout>

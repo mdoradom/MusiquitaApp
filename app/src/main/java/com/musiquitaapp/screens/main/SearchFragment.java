@@ -24,13 +24,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.GsonBuilder;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.musiquitaapp.R;
+import com.musiquitaapp.adapters.PlaylistAdapter;
 import com.musiquitaapp.adapters.SearchAdapter;
+import com.musiquitaapp.adapters.SongAdapter;
+import com.musiquitaapp.controllers.PlaylistController;
+import com.musiquitaapp.databinding.FragmentBottomSheetDialogBinding;
 import com.musiquitaapp.databinding.FragmentSearchBinding;
 import com.musiquitaapp.models.Config;
 import com.musiquitaapp.models.Items;
+import com.musiquitaapp.models.PlayListFirebase;
 import com.musiquitaapp.models.YouTubeVideo;
 import com.musiquitaapp.youtube.YTApplication;
 
@@ -45,11 +53,14 @@ import java.util.Objects;
 public class SearchFragment extends Fragment {
 
     private FragmentSearchBinding binding;
+    private FragmentBottomSheetDialogBinding binding2;
     private ArrayList<Items> items;
     private RecyclerView searchRecycler;
     private SearchAdapter myAdapter;
     private List<Items> results;
-    private YouTubeVideo videoItem;
+    public YouTubeVideo videoItem;
+    private BottomSheetDialog bottomSheetDialog;
+    private PlaylistAdapter playlistAdapter = null;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -72,6 +83,13 @@ public class SearchFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.addPlaylist:
+                videoItem = new YouTubeVideo();
+                videoItem.setDuration("");
+                videoItem.setId(results.get(position).getId().videoId);
+                videoItem.setTitle(results.get(position).getSnippet().getTitle());
+                videoItem.setThumbnailURL(results.get(position).getSnippet().getThumbnails().getHigh().getUrl());
+                videoItem.setAuthor(results.get(position).getSnippet().getChannelTitle());
+                showBottomSheetDialog();
                 Toast.makeText(getContext(), "Añadir a Playlists", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.addQueue:
@@ -89,12 +107,27 @@ public class SearchFragment extends Fragment {
         return super.onContextItemSelected(item);
     }
 
+    private void showBottomSheetDialog() {
+        bottomSheetDialog.show();
+        if (playlistAdapter == null) {
+            new PlaylistController().getAllUserPlaylistsByUUID(FirebaseAuth.getInstance().getCurrentUser().getUid(), list -> {
+                    playlistAdapter = new PlaylistAdapter(list, SearchFragment.this.getContext(), videoItem);
+                    binding2.recyclerQueue.setAdapter(playlistAdapter);
+                    binding2.recyclerQueue.setLayoutManager(new LinearLayoutManager(getContext()));
+            });
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentSearchBinding.inflate(getLayoutInflater());
+        binding2 = FragmentBottomSheetDialogBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
+
+        bottomSheetDialog = new BottomSheetDialog(getContext());
+        bottomSheetDialog.setContentView(binding2.getRoot());
 
         // TODO Fragment cosas
 

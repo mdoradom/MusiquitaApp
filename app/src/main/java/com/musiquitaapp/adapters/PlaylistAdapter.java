@@ -14,18 +14,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.musiquitaapp.R;
+import com.musiquitaapp.controllers.PlaylistController;
 import com.musiquitaapp.models.PlayListFirebase;
 import com.musiquitaapp.models.YouTubeVideo;
+import com.musiquitaapp.screens.main.SearchFragment;
 
 import java.util.List;
 
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyViewHolder>{
     private List<PlayListFirebase> videos;
     private Context context;
+    private YouTubeVideo video;
 
     public PlaylistAdapter(List<PlayListFirebase> videos, Context context) {
         this.videos = videos;
         this.context = context;
+    }
+
+    public PlaylistAdapter (List<PlayListFirebase> videos, Context context, YouTubeVideo video) {
+        this.videos = videos;
+        this.context = context;
+        this.video = video;
     }
 
     @NonNull
@@ -45,6 +54,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
         Glide.with(context)
                 .load(videos.get(position).thumbnail)
                 .into(holder.playlistImage);
+
+        holder.relativeLayout.setOnClickListener(v -> new PlaylistController().addSongToPlaylist(video, videos.get(position).playlistID));
     }
 
     @Override
