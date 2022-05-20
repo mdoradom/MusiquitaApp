@@ -59,16 +59,19 @@
         android:name="com.musiquitaapp.screens.media.PlayerActivity"
         android:label="activity_player"
         tools:layout="@layout/activity_player" >
-        <argument
-            android:name="song"
-            app:argType="com.musiquitaapp.models.YouTubeVideo" />
-        <argument
-            android:name="queue"
-            app:argType="com.musiquitaapp.models.YouTubeVideo[]" />
     </activity>
     <activity
         android:id="@+id/authenticationMethodSelector"
         android:name="com.musiquitaapp.screens.login.AuthenticationMethodSelector"
         android:label="activity_authentication_method_selector"
         tools:layout="@layout/activity_authentication_method_selector" />
+    <fragment
+        android:id="@+id/libraryFavoritesFragment"
+        android:name="com.musiquitaapp.screens.main.LibraryFavoritesFragment"
+        android:label="fragment_library_favorites"
+        tools:layout="@layout/fragment_library_favorites" >
+        <action
+            android:id="@+id/action_libraryFavoritesFragment_to_playerActivity"
+            app:destination="@id/playerActivity" />
+    </fragment>
 </navigation>

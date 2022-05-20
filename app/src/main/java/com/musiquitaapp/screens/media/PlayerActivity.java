@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -88,6 +90,8 @@ public class PlayerActivity extends AppCompatActivity {
         bottomSheetDialog = new BottomSheetDialog(this);
         bottomSheetDialog.setContentView(binding2.getRoot());
 
+        serviceIntent = new Intent(getApplicationContext(), BackgroundAudioService.class);
+
         YTApplication.getPos().observe(this, integer -> {
             /*youTubeVideo = YTApplication.getMediaItems().get(YTApplication.getPos().getValue());
 
@@ -97,7 +101,7 @@ public class PlayerActivity extends AppCompatActivity {
 
             binding.songTitle.setText(youTubeVideo.getTitle());
             binding.songTitle.setSelected(true);
-            binding.songLenght.setText(youTubeVideo.getDuration());*/
+            binding.songLenght.setText(youTubeVideo.getDuration());
 
             youTubeVideo = YTApplication.getMediaItems().get(YTApplication.getPos().getValue());
 
@@ -112,13 +116,17 @@ public class PlayerActivity extends AppCompatActivity {
             if(favouritesController.isSongFavourited(youTubeVideo)){
                 binding.favIcon.setImageResource(R.drawable.ic_baseline_favorite_24);
                 isChecked = false;
-            }
+            }*/
+
+            startService();
+
+            playSong();
         });
 
         startService();
 
-        //binding.progressBar.setMax(song.getDuration());
-        binding.progressBar.setMax(1000);
+        //binding.progressBar.setMax((int) YTApplication.getExoPlayer().getDuration());
+
         playSong();
 
         binding.loopButton.setOnClickListener(v -> {
@@ -139,16 +147,18 @@ public class PlayerActivity extends AppCompatActivity {
         });
 
         binding.playButton.setOnClickListener(v -> {
-            if (isPlaying) {
-                isPlaying = false;
+            if (YTApplication.getIsPlaying().getValue()) {
+                YTApplication.getIsPaused().setValue(true);
+                YTApplication.getIsPlaying().setValue(false);
                 serviceIntent.setAction(BackgroundAudioService.ACTION_PAUSE);
                 startService(serviceIntent);
                 animations.clickAnimation(binding.playButton);
                 binding.playButton.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24);
             } else {
+
                 serviceIntent.setAction(BackgroundAudioService.ACTION_RESUME);
                 startService(serviceIntent);
-                isPlaying = true;
+                YTApplication.getIsPlaying().setValue(true);
                 binding.playButton.setImageResource(R.drawable.ic_baseline_play_circle_filled_24);
             }
         });
@@ -274,7 +284,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         bottomSheetDialog.show();
 
-        songAdapter = new SongAdapter(YTApplication.getMediaItems(), getApplicationContext());
+        songAdapter = new SongAdapter(YTApplication.getMediaItems(), getApplicationContext(), "PlayerActivity");
         binding2.recyclerQueue.setAdapter(songAdapter);
         binding2.recyclerQueue.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }
@@ -282,14 +292,13 @@ public class PlayerActivity extends AppCompatActivity {
     private void startService() {
         youTubeVideo = YTApplication.getMediaItems().get(YTApplication.getPos().getValue());
 
-        System.out.println(youTubeVideo.getThumbnailURL());
-
         loadImage(youTubeVideo.getThumbnailURL(), true);
 
+        binding.progressBar.setMax(youTubeVideo.getDuration());
         binding.songTitle.setText(youTubeVideo.getTitle());
         binding.songTitle.setSelected(true);
         binding.artistName.setText(youTubeVideo.getAuthor());
-        binding.songLenght.setText(youTubeVideo.getDuration());
+        binding.songLenght.setText(String.valueOf(youTubeVideo.getDuration()));
     }
 
     private void loadImage(String url, Boolean changeBackground) {
@@ -298,8 +307,6 @@ public class PlayerActivity extends AppCompatActivity {
                 .listener(new RequestListener<Bitmap>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                        isPlaying = false;
-                        // TODO fails to load song thubnail revisar
                         System.out.println("Failed to load Song Image, replacing with placeholder animation");
                         loadAnimation();
                         return false;
@@ -307,7 +314,6 @@ public class PlayerActivity extends AppCompatActivity {
 
                     @Override
                     public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                        isPlaying = true;
                         Palette palette = Palette.from(resource).generate();
                         vibrant = palette.getVibrantSwatch();
 
@@ -363,13 +369,23 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void playSong() {
-        serviceIntent = new Intent(getApplicationContext(), BackgroundAudioService.class);
+        if (YTApplication.getIsPlaying().getValue()) {
 
-        serviceIntent.setAction(BackgroundAudioService.ACTION_PLAY);
-        serviceIntent.putExtra(Config.YOUTUBE_TYPE, ItemType.YOUTUBE_MEDIA_TYPE_PLAYLIST);
-        serviceIntent.putExtra(Config.YOUTUBE_TYPE_PLAYLIST, YTApplication.getMediaItems());
+        } else {
+            if (YTApplication.getIsPaused().getValue()) {
 
-        getApplicationContext().startService(serviceIntent);
+            } else {
+                YTApplication.getIsPlaying().setValue(true);
+
+                serviceIntent.setAction(BackgroundAudioService.ACTION_PLAY);
+                serviceIntent.putExtra(Config.YOUTUBE_TYPE, ItemType.YOUTUBE_MEDIA_TYPE_PLAYLIST);
+                serviceIntent.putExtra(Config.YOUTUBE_TYPE_PLAYLIST, YTApplication.getMediaItems());
+
+                getApplicationContext().startService(serviceIntent);
+                UpdateSeekBarProgress updateSeekBarProgress = new UpdateSeekBarProgress();
+                handler.post(updateSeekBarProgress);
+            }
+        }
     }
 
     private void loadAnimation() {
@@ -391,6 +407,20 @@ public class PlayerActivity extends AppCompatActivity {
                                     sImage + i , "drawable", getPackageName()),
                             null),
                     50);
+        }
+    }
+
+    public static int UPDATE_SEEKBAR = 100;
+    Handler handler = new Handler(Looper.getMainLooper());
+    public class UpdateSeekBarProgress implements Runnable {
+        @Override
+        public void run() {
+
+            if (YTApplication.getExoPlayer() != null) {
+                Log.d("music", "(int)YTApplication.getExoPlayer().getCurrentPosition(): "+(int)YTApplication.getExoPlayer().getCurrentPosition()/1000);
+                binding.progressBar.setProgress((int) YTApplication.getExoPlayer().getCurrentPosition());
+                handler.postDelayed(this, UPDATE_SEEKBAR);
+            }
         }
     }
 }

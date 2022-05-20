@@ -59,7 +59,7 @@ public class SearchFragment extends Fragment {
     private RecyclerView searchRecycler;
     private SearchAdapter myAdapter;
     private List<Items> results;
-    public YouTubeVideo videoItem;
+    public YouTubeVideo videoItem = new YouTubeVideo();
     private BottomSheetDialog bottomSheetDialog;
     private PlaylistMenuAdapter playlistAdapter = null;
 
@@ -82,25 +82,20 @@ public class SearchFragment extends Fragment {
             return super.onContextItemSelected(item);
         }
 
+        myAdapter.obtenerTiempo(results.get(position).getId().videoId, duration -> videoItem.setDuration(duration));
+        videoItem.setId(results.get(position).getId().videoId);
+        videoItem.setTitle(results.get(position).getSnippet().getTitle());
+        videoItem.setThumbnailURL(results.get(position).getSnippet().getThumbnails().getHigh().getUrl());
+        videoItem.setAuthor(results.get(position).getSnippet().getChannelTitle());
+
         switch (item.getItemId()) {
             case R.id.addPlaylist:
-                videoItem = new YouTubeVideo();
-                videoItem.setDuration("");
-                videoItem.setId(results.get(position).getId().videoId);
-                videoItem.setTitle(results.get(position).getSnippet().getTitle());
-                videoItem.setThumbnailURL(results.get(position).getSnippet().getThumbnails().getHigh().getUrl());
-                videoItem.setAuthor(results.get(position).getSnippet().getChannelTitle());
                 showBottomSheetDialog();
                 Toast.makeText(getContext(), "Añadir a Playlists", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.addQueue:
-                videoItem = new YouTubeVideo();
                 //TODO hay que convertir el tiempo que nos da yt (PT3M22S) a segundos
-                videoItem.setDuration("");
-                videoItem.setId(results.get(position).getId().videoId);
-                videoItem.setTitle(results.get(position).getSnippet().getTitle());
-                videoItem.setThumbnailURL(results.get(position).getSnippet().getThumbnails().getHigh().getUrl());
-                videoItem.setAuthor(results.get(position).getSnippet().getChannelTitle());
+
                 YTApplication.getMediaItems().add(videoItem);
                 Toast.makeText(getContext(), "Añadir a Cola", Toast.LENGTH_SHORT).show();
                 break;

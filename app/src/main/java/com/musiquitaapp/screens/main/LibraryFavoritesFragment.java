@@ -22,7 +22,6 @@ public class LibraryFavoritesFragment extends Fragment {
 
     private FragmentLibraryFavoritesBinding binding;
     private SongAdapter songAdapter = null;
-    PlaylistController playlistController = new PlaylistController();
 
     public LibraryFavoritesFragment () {
         // Required empty public constructor
@@ -41,7 +40,7 @@ public class LibraryFavoritesFragment extends Fragment {
         View view = binding.getRoot();
 
         new FavouritesController().getFavouriteSongs(list -> {
-            songAdapter = new SongAdapter(list.songs, getContext());
+            songAdapter = new SongAdapter(list.songs, getContext(), "LibraryFavoritesFragment");
             binding.songRecycler.setAdapter(songAdapter);
             binding.songRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         });

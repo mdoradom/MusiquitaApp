@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -24,6 +26,9 @@ import com.musiquitaapp.models.Config;
 import com.musiquitaapp.models.Items;
 import com.musiquitaapp.models.YouTubeVideo;
 import com.musiquitaapp.youtube.YTApplication;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -35,6 +40,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
     private YouTubeVideo videoItem;
     private int position;
     private String time;
+    private int tiempo;
 
     public int getPosition() {
         return position;
@@ -73,44 +79,92 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
 
         holder.relativeLayout.setOnClickListener(v -> {
             YTApplication.getMediaItems().clear();
-            RequestQueue queue = Volley.newRequestQueue(mContext);
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.GET,
-                    Config.YOUTUBE_GET_TIME + mItems.get(position).getId().videoId + Config.YOUTUBE_GET_TIME_2 + Config.YOUTUBE_API_KEY,
-                    null,
-                    response -> {
-                        //TODO el response.optString no coje la duración bien porque
-                        // k;fjvertsdjkgnbsretkhnsjkrethn está como muy dentro del json (creo)
-                        time = response.optString("duration");
 
-                        System.out.println(time);
-                        Pattern pattern = Pattern.compile("P(\\d+D)?T(\\d+H)?(\\d+M)?(\\d+S)?", Pattern.CASE_INSENSITIVE);
-                        Matcher m = pattern.matcher(time);
-
-                        if (m.find( )) {
-                            System.out.println("Found value D: " + m.group(0) );
-                            System.out.println("Found value H: " + m.group(1) );
-                            System.out.println("Found value M: " + m.group(2) );
-                            System.out.println("Found value S: " + m.group(3) );
-                        } else {
-                            System.out.println("NO MATCH");
-                        }
-                    },
-                    error -> Log.d("tag", "onErrorResponse: " + error.getMessage())
-            );
-
-            queue.add(jsonObjectRequest);
             videoItem = new YouTubeVideo();
             //TODO hay que convertir el tiempo que nos da yt (PT3M22S) a segundos
-            videoItem.setDuration(time);
+            obtenerTiempo(mItems.get(position).getId().videoId, duration -> videoItem.setDuration(duration));
+
             videoItem.setId(mItems.get(position).getId().videoId);
             videoItem.setTitle(mItems.get(position).getSnippet().getTitle());
             videoItem.setThumbnailURL(mItems.get(position).getSnippet().getThumbnails().getHigh().getUrl());
-            videoItem.setAuthor(mItems.get(position).getSnippet().getChannelTitle());
             YTApplication.getMediaItems().add(videoItem);
             YTApplication.getPos().setValue(0);
+            YTApplication.getIsPlaying().setValue(false);
+            YTApplication.getIsPaused().setValue(false);
             Navigation.createNavigateOnClickListener(R.id.action_searchFragment_to_playerActivity).onClick(v);
         });
+    }
+    public interface ObtenerTiempoCallBack{
+        void onCallBack(int duration);
+    }
+    public void obtenerTiempo(String videoId, ObtenerTiempoCallBack obtenerTiempoCallBack){
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                Config.YOUTUBE_GET_TIME + videoId + Config.YOUTUBE_GET_TIME_2 + Config.YOUTUBE_API_KEY,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        JSONArray thing = response.optJSONArray("items");
+                        JSONObject obj = thing.optJSONObject(0);
+                        JSONObject obj2 = obj.optJSONObject("contentDetails");
+                        time = obj2.optString("duration");
+                        System.out.println(time);
+                        String oneUse = "";
+                        Pattern pattern = Pattern.compile("P(\\d+D)?T(\\d+H)?(\\d+M)?(\\d+S)?", Pattern.CASE_INSENSITIVE);
+                        Matcher m = pattern.matcher(time);
+                        if (m.find( )) {
+                            tiempo = 0;
+                            Log.d("music","Found value D: " + m.group(0) );
+                            Log.d("music","Found value H: " + m.group(1) );
+                            Log.d("music","Found value M: " + m.group(2) );
+                            Log.d("music","Found value S: " + m.group(3) );
+                            Log.d("music","Found value S: " + m.group(4) );
+                            if (m.group(1)!=null){
+                                oneUse = m.group(1).replaceAll("\\D+", "");
+                                Log.d("music", oneUse);
+                                tiempo+=Integer.parseInt(oneUse)*24*60*60;
+                                Log.d("music", "Tiempo:" + tiempo);
+
+                            }
+                            if (m.group(2)!=null){
+                                oneUse = m.group(2).replaceAll("\\D+", "");
+                                Log.d("music", oneUse);
+                                tiempo+=Integer.parseInt(oneUse)*60*60;
+                                Log.d("music", "Tiempo:" + tiempo);
+
+                            }
+                            if (m.group(3)!=null){
+                                oneUse = m.group(3).replaceAll("\\D+", "");
+                                Log.d("music", oneUse);
+                                tiempo+=Integer.parseInt(oneUse)*60;
+                                Log.d("music", "Tiempo:" + tiempo);
+                            }
+                            if (m.group(4)!=null){
+                                oneUse = m.group(4).replaceAll("\\D+", "");
+                                Log.d("music", oneUse);
+                                tiempo+=Integer.parseInt(oneUse);
+                                Log.d("music", "Tiempo:" + tiempo);
+
+                            }
+                            obtenerTiempoCallBack.onCallBack(tiempo);
+                        } else {
+                            Log.d("music","NO MATCH");
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) { Log.d("tag", "onErrorResponse: " + error.getMessage()); }
+                }
+        );
+        queue.add(jsonObjectRequest);
+
+        Log.d("music", "Tiempo FINAL:" + tiempo);
     }
 
     @Override
