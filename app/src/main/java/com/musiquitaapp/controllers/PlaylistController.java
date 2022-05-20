@@ -1,7 +1,13 @@
 package com.musiquitaapp.controllers;
 
+import android.content.Context;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -39,10 +45,12 @@ public class PlaylistController {
                 .set(myPlaylist);
     }
 
-    public void deletePlaylist(String playlistID){
+    public void deletePlaylist(String playlistID, Context context){
         FirebaseFirestore.getInstance().collection("Playlists")
                 .document(playlistID)
-                .delete();
+                .delete()
+                .addOnSuccessListener(unused -> Toast.makeText(context, "Playlist eliminada correctamente", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show());
     }
 
     public List<PlayListFirebase> getPlaylistsByTitle(String playlistTitle){
@@ -96,10 +104,6 @@ public class PlaylistController {
 
     public interface FirestoreCallback {
         void onCallback(List<PlayListFirebase> list);
-    }
-
-    private List<PlayListFirebase> callbackGetAllUserPlaylistsByUUID (List<PlayListFirebase> result) {
-        return result;
     }
 
     public DocumentReference getPlaylistReferenceByID(String playlistID){

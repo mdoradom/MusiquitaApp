@@ -42,6 +42,7 @@ import com.bumptech.glide.request.target.Target;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.musiquitaapp.R;
 import com.musiquitaapp.adapters.SongAdapter;
+import com.musiquitaapp.controllers.FavouritesController;
 import com.musiquitaapp.databinding.ActivityPlayerBinding;
 import com.musiquitaapp.databinding.FragmentBottomSheetDialogBinding;
 import com.musiquitaapp.models.Config;
@@ -76,6 +77,8 @@ public class PlayerActivity extends AppCompatActivity {
 
     private BottomSheetDialog bottomSheetDialog;
 
+    FavouritesController favouritesController = new FavouritesController();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +89,16 @@ public class PlayerActivity extends AppCompatActivity {
         bottomSheetDialog.setContentView(binding2.getRoot());
 
         YTApplication.getPos().observe(this, integer -> {
+            /*youTubeVideo = YTApplication.getMediaItems().get(YTApplication.getPos().getValue());
+
+            System.out.println(youTubeVideo.getThumbnailURL());
+
+            loadImage(youTubeVideo.getThumbnailURL(), true);
+
+            binding.songTitle.setText(youTubeVideo.getTitle());
+            binding.songTitle.setSelected(true);
+            binding.songLenght.setText(youTubeVideo.getDuration());*/
+
             youTubeVideo = YTApplication.getMediaItems().get(YTApplication.getPos().getValue());
 
             System.out.println(youTubeVideo.getThumbnailURL());
@@ -95,6 +108,11 @@ public class PlayerActivity extends AppCompatActivity {
             binding.songTitle.setText(youTubeVideo.getTitle());
             binding.songTitle.setSelected(true);
             binding.songLenght.setText(youTubeVideo.getDuration());
+
+            if(favouritesController.isSongFavourited(youTubeVideo)){
+                binding.favIcon.setImageResource(R.drawable.ic_baseline_favorite_24);
+                isChecked = false;
+            }
         });
 
         startService();
@@ -179,14 +197,17 @@ public class PlayerActivity extends AppCompatActivity {
             popupMenu.show();
         });
 
+
         binding.favIcon.setOnClickListener(v -> {
             if (isChecked) {
                 binding.favIcon.setImageResource(R.drawable.ic_baseline_favorite_border_24);
                 animations.clickAnimation(binding.favIcon);
+                favouritesController.deleteFavouriteSongs(youTubeVideo, getApplicationContext());
                 isChecked = false;
             } else {
                 binding.favIcon.setImageResource(R.drawable.ic_baseline_favorite_24);
                 animations.clickAnimation(binding.favIcon);
+                favouritesController.addFavouriteSongs(youTubeVideo, getApplicationContext());
                 isChecked = true;
             }
         });

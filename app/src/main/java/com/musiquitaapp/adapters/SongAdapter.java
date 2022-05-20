@@ -16,12 +16,13 @@ import com.musiquitaapp.R;
 import com.musiquitaapp.models.YouTubeVideo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.MyViewHolder> {
-    private ArrayList<YouTubeVideo> videos;
+    private List<YouTubeVideo> videos;
     private Context context;
 
-    public SongAdapter(ArrayList<YouTubeVideo> videos, Context context) {
+    public SongAdapter(List<YouTubeVideo> videos, Context context) {
         this.videos = videos;
         this.context = context;
     }

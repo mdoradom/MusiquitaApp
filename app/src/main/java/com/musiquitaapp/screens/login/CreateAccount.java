@@ -31,11 +31,16 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.google.firebase.storage.internal.StorageReferenceUri;
 import com.musiquitaapp.R;
+import com.musiquitaapp.controllers.FavouritesController;
 import com.musiquitaapp.databinding.FragmentCreateAccountBinding;
+import com.musiquitaapp.models.PlayListFirebase;
 import com.musiquitaapp.models.Profile;
+import com.musiquitaapp.models.YouTubeVideo;
 import com.musiquitaapp.screens.BaseFragment;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class CreateAccount extends BaseFragment {
@@ -146,6 +151,19 @@ public class CreateAccount extends BaseFragment {
                                                         navController.navigate(R.id.dashboardActivity)
                                                 )
                                         );
+
+                                new FavouritesController().getFavouriteSongs(list -> {
+                                    if (list == null) {
+                                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                                        List<YouTubeVideo> videos = new ArrayList<>();
+
+                                        FirebaseFirestore.getInstance()
+                                                .collection("Favourites")
+                                                .document(user.getUid())
+                                                .set(new PlayListFirebase(user.getEmail(), user.getUid(), "", "Liked Songs", "", videos));
+                                    }
+                                });
                             }
                         } else {
                             Toast.makeText(requireContext(), task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();

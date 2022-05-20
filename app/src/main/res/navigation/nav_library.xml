@@ -27,9 +27,9 @@
     </fragment>
     <fragment
         android:id="@+id/libraryAlbumsFragment"
-        android:name="com.musiquitaapp.screens.main.LibraryAlbumsFragment"
+        android:name="com.musiquitaapp.screens.main.LibraryFavoritesFragment"
         android:label="fragment_library_albums"
-        tools:layout="@layout/fragment_library_albums" />
+        tools:layout="@layout/fragment_library_favorites" />
     <fragment
         android:id="@+id/libraryPlaylistsFragment"
         android:name="com.musiquitaapp.screens.main.LibraryPlaylistsFragment"

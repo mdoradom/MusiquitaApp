@@ -32,6 +32,7 @@ public class AlbumFragment extends Fragment {
         binding = FragmentAlbumBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+
         return view;
     }
 }

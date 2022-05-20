@@ -44,7 +44,7 @@ public class LibraryFragment extends Fragment {
                     case 1:
                         return new LibraryArtistsFragment();
                     case 2:
-                        return new LibraryAlbumsFragment();
+                        return new LibraryFavoritesFragment();
                 }
             }
 
@@ -65,7 +65,7 @@ public class LibraryFragment extends Fragment {
                         tab.setText("Artistas");
                         break;
                     case 2:
-                        tab.setText("Albums");
+                        tab.setText("Favoritos");
                         break;
                 }
             }

@@ -31,6 +31,7 @@ import com.google.gson.GsonBuilder;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.musiquitaapp.R;
 import com.musiquitaapp.adapters.PlaylistAdapter;
+import com.musiquitaapp.adapters.PlaylistMenuAdapter;
 import com.musiquitaapp.adapters.SearchAdapter;
 import com.musiquitaapp.adapters.SongAdapter;
 import com.musiquitaapp.controllers.PlaylistController;
@@ -60,7 +61,7 @@ public class SearchFragment extends Fragment {
     private List<Items> results;
     public YouTubeVideo videoItem;
     private BottomSheetDialog bottomSheetDialog;
-    private PlaylistAdapter playlistAdapter = null;
+    private PlaylistMenuAdapter playlistAdapter = null;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -111,7 +112,7 @@ public class SearchFragment extends Fragment {
         bottomSheetDialog.show();
         if (playlistAdapter == null) {
             new PlaylistController().getAllUserPlaylistsByUUID(FirebaseAuth.getInstance().getCurrentUser().getUid(), list -> {
-                    playlistAdapter = new PlaylistAdapter(list, SearchFragment.this.getContext(), videoItem);
+                    playlistAdapter = new PlaylistMenuAdapter(list, SearchFragment.this.getContext(), videoItem);
                     binding2.recyclerQueue.setAdapter(playlistAdapter);
                     binding2.recyclerQueue.setLayoutManager(new LinearLayoutManager(getContext()));
             });

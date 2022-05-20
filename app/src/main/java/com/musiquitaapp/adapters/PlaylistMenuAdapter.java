@@ -21,17 +21,17 @@ import com.musiquitaapp.screens.main.SearchFragment;
 
 import java.util.List;
 
-public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyViewHolder>{
+public class PlaylistMenuAdapter extends RecyclerView.Adapter<PlaylistMenuAdapter.MyViewHolder>{
     private List<PlayListFirebase> videos;
     private Context context;
     private YouTubeVideo video;
 
-    public PlaylistAdapter(List<PlayListFirebase> videos, Context context) {
+    public PlaylistMenuAdapter(List<PlayListFirebase> videos, Context context) {
         this.videos = videos;
         this.context = context;
     }
 
-    public PlaylistAdapter (List<PlayListFirebase> videos, Context context, YouTubeVideo video) {
+    public PlaylistMenuAdapter (List<PlayListFirebase> videos, Context context, YouTubeVideo video) {
         this.videos = videos;
         this.context = context;
         this.video = video;
@@ -42,7 +42,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.playlist_layout, parent, false);
-        return new PlaylistAdapter.MyViewHolder(view);
+        return new PlaylistMenuAdapter.MyViewHolder(view);
     }
 
     @Override
@@ -55,15 +55,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
                 .load(videos.get(position).thumbnail)
                 .into(holder.playlistImage);
 
-        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View v) {
-                // TODO intent a la playlists con sus datos
-            }
-        });
-
-        holder.closeButton.setImageResource(R.drawable.ic_baseline_close_24);
-        holder.closeButton.setOnClickListener(v -> new PlaylistController().deletePlaylist(videos.get(position).playlistID, context));
+        holder.relativeLayout.setOnClickListener(v -> new PlaylistController().addSongToPlaylist(video, videos.get(position).playlistID));
     }
 
     @Override
@@ -78,7 +70,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
         TextView playlistLenght;
         RelativeLayout relativeLayout;
         ImageView playlistImage;
-        ImageView closeButton;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,8 +80,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.MyView
 
             relativeLayout = itemView.findViewById(R.id.mainContainer);
             playlistImage = itemView.findViewById(R.id.playlistImage);
-
-            closeButton = itemView.findViewById(R.id.closeButton);
         }
     }
 }
