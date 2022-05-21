@@ -27,7 +27,7 @@
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/drawable/ic_outline_library_music_24.xml" value="0.1995" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/drawable/play_button.xml" value="0.333" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/activity_authentication_method_selector.xml" value="0.371875" />
-        <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/activity_connect.xml" value="0.5" />
+        <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/activity_connect.xml" value="0.25" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/activity_dashboard.xml" value="0.371875" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/activity_edit_profile.xml" value="0.22" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/activity_loading_screen.xml" value="0.24254742547425473" />
@@ -50,6 +50,7 @@
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/fragment_search.xml" value="0.33" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/playlist_layout.xml" value="0.67" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/search_layout.xml" value="0.33" />
+        <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/session_layout.xml" value="0.33055555555555555" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/layout/song_layout.xml" value="0.3917995444191344" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.33055555555555555" />
         <entry key="..\:/usuarios/mario/Documents/GitHub/MusiquitaApp/app/src/main/res/menu/player_menu.xml" value="0.33055555555555555" />

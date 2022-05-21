@@ -85,8 +85,6 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
     private boolean isStarting = false;
     private String log = "music";
 
-
-
     @Override
     public void onCreate(){
         super.onCreate();
@@ -116,6 +114,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
         handleIntent(intent);
         return super.onStartCommand(intent, flags, startId);
     }
+
     /**
      * Handles intent (player options play/pause/stop...)
      *
@@ -145,6 +144,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
             mController.getTransportControls().setRepeatMode(PlaybackStateCompat.REPEAT_MODE_NONE);
         }
     }
+
     private void playVideo(){
 
         isStarting = true;
@@ -180,6 +180,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
                 break;
         }
     }
+
     private YtFile getBestStream(SparseArray<YtFile> ytFiles) {
 
         connectionQuality = ConnectionClassManager.getInstance().getCurrentBandwidthQuality();
@@ -247,12 +248,14 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
         buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", ACTION_PLAY));
 
     }
+
     public boolean isPlaying(){
         if(YTApplication.getExoPlayer()!=null){
             return YTApplication.getExoPlayer().isPlaying();
         }
         return false;
     }
+
     private void initMediaSessions() {
         // Make sure the media player will acquire a wake-lock while playing. If we don't do
         // that, the CPU might go to sleep while the song is playing, causing playback to stop.
@@ -326,6 +329,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
                 }
         );
     }
+
     private void initPhoneCallListener() {
         PhoneStateListener phoneStateListener = new PhoneStateListener() {
             @Override
@@ -361,6 +365,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
 
         }
     }
+
     private void playPrevious() {
         //if media type is video not playlist, just loop it
         if (mediaType == ItemType.YOUTUBE_MEDIA_TYPE_VIDEO) {
@@ -377,6 +382,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
         videoItem = YTApplication.getMediaItems().get(YTApplication.getPos().getValue());
         extractUrlAndPlay();
     }
+
     private void playNext() {
         //if media type is video not playlist, just loop it
         if (mediaType == ItemType.YOUTUBE_MEDIA_TYPE_VIDEO) {
@@ -393,9 +399,11 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
         videoItem = YTApplication.getMediaItems().get(YTApplication.getPos().getValue());
         extractUrlAndPlay();
     }
-    private void seekVideo(int seekTo) {
+
+    public void seekVideo(int seekTo) {
         YTApplication.getExoPlayer().seekTo(seekTo);
     }
+
     private void buildNotification(NotificationCompat.Action action) {
 
         final androidx.media.app.NotificationCompat.MediaStyle style = new androidx.media.app.NotificationCompat.MediaStyle();
@@ -434,6 +442,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
         notificationManager.notify(1, builder.build());
 
     }
+
     private NotificationCompat.Action generateAction(int icon, String title, String intentAction) {
         Intent intent = new Intent(getApplicationContext(), BackgroundAudioService.class);
         intent.setAction(intentAction);
@@ -454,6 +463,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
             updateNotificationLargeIcon(bitmap);
         }
     };
+
     /**
      * Updates only large icon in notification panel when bitmap is decoded
      *
@@ -464,16 +474,19 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, builder.build());
     }
+
     /**
      * Resumes video
      */
     private void resumeVideo() {
         YTApplication.getExoPlayer().play();
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
+
     @Override
     public void onCompletion(MediaPlayer mp) {
 
@@ -483,16 +496,19 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
     public void onPrepared(MediaPlayer mp) {
 
     }
+
     public class LocalBinder extends Binder {
         BackgroundAudioService getService() {
             return BackgroundAudioService.this;
         }
     }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
+
     private final IBinder mBinder = new LocalBinder();
 
 }
