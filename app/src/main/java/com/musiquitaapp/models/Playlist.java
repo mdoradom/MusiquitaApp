@@ -1,7 +1,5 @@
 package com.musiquitaapp.models;
 
-import org.checkerframework.checker.units.qual.Length;
-
 public class Playlist {
     String id;
     Snippet snippet;
