@@ -28,10 +28,26 @@ public class PlaylistController {
     private PlayListFirebase myPlaylist;
     private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-
-
     public void setCurrentUser(FirebaseUser currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public interface SongCalllback{
+        void songsCallback(List<YouTubeVideo> songs);
+    }
+
+    public void getAllPlaylistSongs(String playlistID, SongCalllback songCalllback){
+        FirebaseFirestore.getInstance()
+                .collection("Playtlists")
+                .document(playlistID)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isComplete()) {
+                        PlayListFirebase playListFirebase = task.getResult().toObject(PlayListFirebase.class);
+                        songCalllback.songsCallback(playListFirebase.songs);
+                    }
+                });
+
     }
 
     public void createPlaylist(String title, String description, String thumbnailUrl){

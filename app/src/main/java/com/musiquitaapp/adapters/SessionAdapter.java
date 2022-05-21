@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.musiquitaapp.R;
+import com.musiquitaapp.controllers.SessionController;
 import com.musiquitaapp.models.MySession;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.MyViewHo
             @Override
             public void onClick (View v) {
                 // TODO que se conecte a la sesión
+                new SessionController().joinSession(sessionList.get(position).ownerName);
             }
         });
     }

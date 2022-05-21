@@ -1,15 +1,12 @@
 package com.musiquitaapp.screens.main;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.musiquitaapp.R;
-import com.musiquitaapp.databinding.FragmentLibraryAlbumsBinding;
+import androidx.fragment.app.Fragment;
+
 import com.musiquitaapp.databinding.FragmentLibraryArtistsBinding;
 
 public class LibraryArtistsFragment extends Fragment {

@@ -86,6 +86,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
 
             videoItem.setId(mItems.get(position).getId().videoId);
             videoItem.setTitle(mItems.get(position).getSnippet().getTitle());
+            videoItem.setAuthor(mItems.get(position).getSnippet().getChannelTitle());
             videoItem.setThumbnailURL(mItems.get(position).getSnippet().getThumbnails().getHigh().getUrl());
             YTApplication.getMediaItems().add(videoItem);
             YTApplication.getPos().setValue(0);
