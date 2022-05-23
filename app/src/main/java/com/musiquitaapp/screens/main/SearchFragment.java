@@ -95,7 +95,9 @@ public class SearchFragment extends Fragment {
                 break;
             case R.id.addQueue:
                 //TODO hay que convertir el tiempo que nos da yt (PT3M22S) a segundos
-
+                if(YTApplication.getSessionController().mySession != null){
+                    YTApplication.getSessionController().addSongToQueue(videoItem);
+                }
                 YTApplication.getMediaItems().add(videoItem);
                 Toast.makeText(getContext(), "Añadir a Cola", Toast.LENGTH_SHORT).show();
                 break;

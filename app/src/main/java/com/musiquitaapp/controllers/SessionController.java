@@ -24,6 +24,7 @@ import com.musiquitaapp.models.YouTubeVideo;
 import com.musiquitaapp.screens.media.ConnectActivity;
 import com.musiquitaapp.services.BackgroundAudioService;
 import com.musiquitaapp.singleton.ComunicatorSingleton;
+import com.musiquitaapp.youtube.YTApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class SessionController implements PlayerChangeController {
     private YouTubeVideo videoItem;
     private Intent serviceIntent;
     private FirebaseAuth mAuth;
-    private MySession mySession;
+    public MySession mySession;
     private Thread sessionThread;
     //private FragmentPantall1Binding binding;
     private ComunicatorSingleton comunicator;
@@ -80,24 +81,24 @@ public class SessionController implements PlayerChangeController {
                     db.addSnapshotListener((value, error) -> {
                         //We want only the Session Owner to send the minutes once they are requested
                         //By this way we avoid all the users overwriting and losing seconds cause of that
-                        MySession sessionTmp = value.toObject(MySession.class);
-                        if(sessionTmp.recentlyJoined){
-                            publishSession();
-                        } else{
-                            mySession = sessionTmp;
-                            //evaluateSession();
+                        if (value != null && value.exists()) {
+                            mySession = value.toObject(MySession.class);
+                            if(mySession.songsInQueue != null){
+                                for(int i= 0; i<mySession.songsInQueue.size(); i++ ){
+                                    if(YTApplication.getMediaItems().size()<i){
+                                        YTApplication.getMediaItems().add(mySession.songsInQueue.get(i));
+                                    }
+                                }
+                            }
+
                         }
+
                     });
                 });
     }
 
     public void publishSession(){
-        db.set(mySession).addOnSuccessListener(task -> {
-            /*binding.textUser.setText(mySession.ownerName);
-            binding.textHour.setText(mySession.hour + "");
-            binding.textMinutes.setText(mySession.minute + "");
-            binding.textSeconds.setText(mySession.second + "");*/
-        });
+        db.set(mySession);
 
         /*FirebaseFirestore.getInstance().collection("Minutes")
                 .document(currentUser.getUid())
@@ -137,10 +138,16 @@ public class SessionController implements PlayerChangeController {
                                 db.set(mySession);
                                 db.addSnapshotListener((value, error) -> {
                                     if (value != null && value.exists()) {
-                                        MySession sessionTmp = value.toObject(MySession.class);
-                                        if (!sessionTmp.recentlyJoined) {
-                                            mySession = value.toObject(MySession.class);
+
+                                        mySession = value.toObject(MySession.class);
+                                        if(mySession.songsInQueue != null){
+                                            for(int i= 0; i<mySession.songsInQueue.size(); i++ ){
+                                                if(YTApplication.getMediaItems().size()<i){
+                                                    YTApplication.getMediaItems().add(mySession.songsInQueue.get(i));
+                                                }
+                                            }
                                         }
+
                                     }
                                 });
                             }
@@ -188,26 +195,17 @@ public class SessionController implements PlayerChangeController {
     }
 
     public void play(){
-        myActivity.startService(serviceIntent);
         mySession.isPlaying = true;
         publishSession();
     }
 
-    public void pause(boolean serverPauseSignal){
-        /*if(sessionThread != null){
-            sessionThread.interrupt();
-            mySession.isPlaying = false;
-            if(!serverPauseSignal){
-                publishSession();
-            }
-            //
-        }*/
+    public void pause(){
         mySession.isPlaying = false;
-        myActivity.stopService(serviceIntent);
+        publishSession();
     }
 
     public void deleteSession(){
-        pause(false);
+        pause();
         FirebaseFirestore.getInstance().collection("Minutes")
                 .document(currentUser.getUid())
                 .delete();
@@ -215,7 +213,7 @@ public class SessionController implements PlayerChangeController {
 
     public void evaluateSession(){
         if(!mySession.isPlaying){
-            pause(true);
+            pause();
         }
     }
 
@@ -229,7 +227,11 @@ public class SessionController implements PlayerChangeController {
     }
 
     public void addSongToQueue(YouTubeVideo song){
+        if(mySession.songsInQueue == null){
+            mySession.songsInQueue = new ArrayList<>();
+        }
         mySession.songsInQueue.add(song);
+        publishSession();
     }
 
     @Override
@@ -238,7 +240,6 @@ public class SessionController implements PlayerChangeController {
         if(reason== Player.TIMELINE_CHANGE_REASON_PLAYLIST_CHANGED){
             publishSession();
         }
-
     }
 
     @Override
@@ -246,7 +247,7 @@ public class SessionController implements PlayerChangeController {
         if(isPlaying){
             play();
         } else{
-            pause(true);
+            pause();
         }
     }
 

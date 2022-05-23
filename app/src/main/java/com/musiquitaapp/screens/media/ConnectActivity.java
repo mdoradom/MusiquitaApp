@@ -13,6 +13,7 @@ import com.musiquitaapp.controllers.SessionController;
 import com.musiquitaapp.databinding.ActivityConnectBinding;
 import com.musiquitaapp.databinding.ActivityProfileBinding;
 import com.musiquitaapp.models.MySession;
+import com.musiquitaapp.youtube.YTApplication;
 
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class ConnectActivity extends AppCompatActivity {
 
     private ActivityConnectBinding binding;
     private SessionAdapter sessionAdapter;
-    private SessionController sessionController = new SessionController();
+    private SessionController sessionController = YTApplication.getSessionController();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

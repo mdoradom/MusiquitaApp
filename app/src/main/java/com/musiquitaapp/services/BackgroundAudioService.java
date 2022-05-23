@@ -50,6 +50,7 @@ import com.google.android.exoplayer2.util.NotificationUtil;
 import com.musiquitaapp.R;
 import com.musiquitaapp.models.Config;
 import com.musiquitaapp.models.ItemType;
+import com.musiquitaapp.models.PlayerDirections;
 import com.musiquitaapp.models.YouTubeVideo;
 import com.musiquitaapp.screens.media.PlayerActivity;
 import com.musiquitaapp.youtube.YTApplication;
@@ -235,6 +236,36 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
                             .setContentType(C.CONTENT_TYPE_MUSIC)
                             .build(),true);
                     YTApplication.getExoPlayer().prepare();
+
+                    YTApplication.getExoPlayer().addListener(new Player.Listener() {
+                        @Override
+                        public void onPlaybackStateChanged(@Player.State int state){
+                            if(YTApplication.getSessionController().mySession != null){
+                                if(state == Player.STATE_READY){
+                                    YTApplication.getSessionController().OnPlayerIsReady();
+                                }
+                                if(state == Player.COMMAND_SEEK_FORWARD){
+                                    YTApplication.getSessionController().songChange(PlayerDirections.FORWARDS);
+
+                                } else if(state == Player.COMMAND_SEEK_BACK){
+                                    YTApplication.getSessionController().songChange(PlayerDirections.BACKWARDS);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onIsPlayingChanged(boolean isPlaying) {
+                            Player.Listener.super.onIsPlayingChanged(isPlaying);
+                            if(YTApplication.getSessionController().mySession != null){
+                                if(isPlaying){
+                                    YTApplication.getSessionController().play();
+                                } else if (!isPlaying){
+                                    YTApplication.getSessionController().pause();
+                                }
+                            }
+                        }
+                    });
+
                     YTApplication.getExoPlayer().play();
                 }
             }
@@ -311,6 +342,7 @@ public class BackgroundAudioService extends Service implements MediaPlayer.OnCom
                         notificationManager.cancel(1);
                         Intent intent = new Intent(getApplicationContext(), BackgroundAudioService.class);
                         stopService(intent);
+
                     }
 
                     @Override

@@ -2,16 +2,14 @@ package com.musiquitaapp.youtube;
 
 import android.app.Application;
 import android.content.Context;
-;import androidx.lifecycle.MutableLiveData;
+
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.api.services.youtube.model.Activity;
 import com.musiquitaapp.controllers.SessionController;
 import com.musiquitaapp.models.YouTubeVideo;
 
 import java.util.ArrayList;
-
 public class YTApplication extends Application {
 
     private static Context mContext;
@@ -21,6 +19,7 @@ public class YTApplication extends Application {
     private static MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
     private static MutableLiveData<Boolean> isPaused = new MutableLiveData<>();
     private static ExoPlayer exoPlayer;
+    private static SessionController sessionController;
 
     public void onCreate() {
         super.onCreate();
@@ -30,6 +29,7 @@ public class YTApplication extends Application {
         isPlaying.setValue(false);
         isPaused.setValue(false);
         exoPlayer = new ExoPlayer.Builder(mContext).build();
+        sessionController = new SessionController();
     }
 
     public static ExoPlayer getExoPlayer() {
@@ -76,4 +76,5 @@ public class YTApplication extends Application {
         return mContext;
     }
 
+    public static SessionController getSessionController() { return sessionController; }
 }
