@@ -74,39 +74,11 @@ public class PlayerActivity extends AppCompatActivity {
         serviceIntent = new Intent(getApplicationContext(), BackgroundAudioService.class);
 
         YTApplication.getPos().observe(this, integer -> {
-            /*youTubeVideo = YTApplication.getMediaItems().get(YTApplication.getPos().getValue());
-
-            System.out.println(youTubeVideo.getThumbnailURL());
-
-            loadImage(youTubeVideo.getThumbnailURL(), true);
-
-            binding.songTitle.setText(youTubeVideo.getTitle());
-            binding.songTitle.setSelected(true);
-            binding.songLenght.setText(youTubeVideo.getDuration());
-
-            youTubeVideo = YTApplication.getMediaItems().get(YTApplication.getPos().getValue());
-
-            System.out.println(youTubeVideo.getThumbnailURL());
-
-            loadImage(youTubeVideo.getThumbnailURL(), true);
-
-            binding.songTitle.setText(youTubeVideo.getTitle());
-            binding.songTitle.setSelected(true);
-            binding.songLenght.setText(youTubeVideo.getDuration());
-
-            if(favouritesController.isSongFavourited(youTubeVideo)){
-                binding.favIcon.setImageResource(R.drawable.ic_baseline_favorite_24);
-                isChecked = false;
-            }*/
-
             startService();
-
             playSong();
         });
 
         startService();
-
-        //binding.progressBar.setMax((int) YTApplication.getExoPlayer().getDuration());
 
         playSong();
 
@@ -161,7 +133,9 @@ public class PlayerActivity extends AppCompatActivity {
         binding.progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                binding.progressBar.setProgress(0 /*current time player*/);
+                if(fromUser){
+                    YTApplication.getExoPlayer().seekTo(progress*1000);
+                }
             }
 
             @Override
@@ -275,11 +249,15 @@ public class PlayerActivity extends AppCompatActivity {
 
         loadImage(youTubeVideo.getThumbnailURL(), true);
 
-        binding.progressBar.setMax(youTubeVideo.getDuration());
         binding.songTitle.setText(youTubeVideo.getTitle());
         binding.songTitle.setSelected(true);
         binding.artistName.setText(youTubeVideo.getAuthor());
         binding.songLenght.setText(String.valueOf(youTubeVideo.getDuration()));
+
+        binding.progressBar.setMax(youTubeVideo.getDuration());
+
+        UpdateSeekBarProgress updateSeekBarProgress = new UpdateSeekBarProgress();
+        handler.post(updateSeekBarProgress);
     }
 
     private void loadImage(String url, Boolean changeBackground) {
@@ -345,10 +323,6 @@ public class PlayerActivity extends AppCompatActivity {
                 .into(binding.songImage);
     }
 
-    private void initializeSeekBar(YouTubeVideo song) {
-        binding.progressBar.setMax(1/*song.getDuration()*/); // necesito int (es double)
-    }
-
     private void playSong() {
         if (YTApplication.getIsPlaying().getValue()) {
 
@@ -399,7 +373,8 @@ public class PlayerActivity extends AppCompatActivity {
 
             if (YTApplication.getExoPlayer() != null) {
                 Log.d("music", "(int)YTApplication.getExoPlayer().getCurrentPosition(): "+(int)YTApplication.getExoPlayer().getCurrentPosition()/1000);
-                binding.progressBar.setProgress((int) YTApplication.getExoPlayer().getCurrentPosition());
+                binding.progressBar.setProgress((int) YTApplication.getExoPlayer().getCurrentPosition()/1000);
+                binding.currentTime.setText(String.valueOf(YTApplication.getExoPlayer().getCurrentPosition()/1000));
                 handler.postDelayed(this, UPDATE_SEEKBAR);
             }
         }

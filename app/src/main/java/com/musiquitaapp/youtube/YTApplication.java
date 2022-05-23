@@ -7,6 +7,7 @@ import android.content.Context;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.api.services.youtube.model.Activity;
+import com.musiquitaapp.controllers.SessionController;
 import com.musiquitaapp.models.YouTubeVideo;
 
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ public class YTApplication extends Application {
     private static MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
     private static MutableLiveData<Boolean> isPaused = new MutableLiveData<>();
     private static ExoPlayer exoPlayer;
-    private YoutubeSingleton youtubeSingleton;
 
     public void onCreate() {
         super.onCreate();
