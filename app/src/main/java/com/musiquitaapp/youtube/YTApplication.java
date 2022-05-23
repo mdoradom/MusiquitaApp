@@ -20,6 +20,7 @@ public class YTApplication extends Application {
     private static MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
     private static MutableLiveData<Boolean> isPaused = new MutableLiveData<>();
     private static ExoPlayer exoPlayer;
+    private YoutubeSingleton youtubeSingleton;
 
     public void onCreate() {
         super.onCreate();

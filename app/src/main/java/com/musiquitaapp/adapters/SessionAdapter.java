@@ -1,6 +1,7 @@
 package com.musiquitaapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.musiquitaapp.R;
 import com.musiquitaapp.controllers.SessionController;
 import com.musiquitaapp.models.MySession;
+import com.musiquitaapp.screens.main.Dashboard;
+import com.musiquitaapp.screens.media.PlayerActivity;
 
 import java.util.List;
 

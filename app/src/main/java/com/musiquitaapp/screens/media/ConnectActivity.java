@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.musiquitaapp.R;
 import com.musiquitaapp.adapters.SessionAdapter;
 import com.musiquitaapp.controllers.SessionController;
@@ -33,12 +34,7 @@ public class ConnectActivity extends AppCompatActivity {
             binding.sessionsRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         });
 
-        binding.createSessionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View v) {
-                sessionController.createSession("prueba");
-            }
-        });
+        binding.createSessionButton.setOnClickListener(v -> sessionController.createSession("Sesión de " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), getApplicationContext()));
 
         setContentView(view);
     }

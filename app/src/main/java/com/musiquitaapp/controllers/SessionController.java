@@ -1,6 +1,8 @@
 package com.musiquitaapp.controllers;
 
+import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -16,8 +18,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.musiquitaapp.models.Config;
 import com.musiquitaapp.models.ItemType;
 import com.musiquitaapp.models.MySession;
+import com.musiquitaapp.models.PlayListFirebase;
 import com.musiquitaapp.models.PlayerDirections;
 import com.musiquitaapp.models.YouTubeVideo;
+import com.musiquitaapp.screens.media.ConnectActivity;
 import com.musiquitaapp.services.BackgroundAudioService;
 import com.musiquitaapp.singleton.ComunicatorSingleton;
 
@@ -41,7 +45,6 @@ public class SessionController implements PlayerChangeController {
     private FragmentActivity myActivity;
     private List<MySession> sessions;
 
-
     public interface SessionCallback {
         void onCallback(List<MySession> list);
     }
@@ -50,35 +53,11 @@ public class SessionController implements PlayerChangeController {
         this.myActivity = myActivity;
     }
 
-    /*public void setBinding(FragmentPantall1Binding binding) {
-        this.binding = binding;
-    }*/
-
     public void setComunicator(ComunicatorSingleton comunicatorSingleton){
         this.comunicator = comunicatorSingleton;
     }
 
-    /*public void createAudioService(FragmentActivity activity){
-        Song songTmp = mySession.currentSong;
-
-        videoItem = new YouTubeVideo();
-
-        videoItem.setId(songTmp.youtubeID);
-        videoItem.setDuration(songTmp.duration);
-        videoItem.setTitle(songTmp.title);
-        videoItem.setViewCount(songTmp.viewCount); //2
-        videoItem.setThumbnailURL(songTmp.thumbnailURL);
-
-        //Esto puede que falle, probar bien si resulta en éxito o fracaso
-
-        serviceIntent = new Intent(activity, comunicator.service.getClass());
-
-        serviceIntent.setAction(BackgroundAudioService.ACTION_PLAY);
-        serviceIntent.putExtra(Config.YOUTUBE_TYPE, ItemType.YOUTUBE_MEDIA_TYPE_VIDEO);
-        serviceIntent.putExtra(Config.YOUTUBE_TYPE_VIDEO, videoItem);
-    }*/
-
-    public void createSession(String sessionName){
+    public void createSession(String sessionName, Context context){
         mySession = new MySession(sessionName, currentUser.getEmail(), 0,
                 0, 0, false, false, 0,
                 null, null, 1);
@@ -88,7 +67,7 @@ public class SessionController implements PlayerChangeController {
                 .document(currentUser.getUid())
                 .set(mySession)
                 .addOnSuccessListener(task2 -> {
-
+                    Toast.makeText(context, "Sesión creada con exito", Toast.LENGTH_SHORT).show();
                 });
 
         //We set the Owner Event Listener here
@@ -144,51 +123,28 @@ public class SessionController implements PlayerChangeController {
                 });
     }
 
-    public void joinSession(String name){
-        /*FirebaseFirestore.getInstance().collection("Minutes")
+    public void joinSession(String name) {
+        FirebaseFirestore.getInstance().collection("Minutes")
                 .whereEqualTo("ownerName", name)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     db = queryDocumentSnapshots.getDocuments().get(0).getReference();
                     db.get().addOnSuccessListener(
-                            documentSnapshot -> mySession = documentSnapshot.toObject(MySession.class)
-                    );
-
-                    for (DocumentSnapshot doc: queryDocumentSnapshots.getDocuments()){
-                        db = doc.getReference();
-                    }
-                });*/
-        FirebaseFirestore.getInstance().collection("Minutes")
-                .whereEqualTo("ownerName", name)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (DocumentSnapshot doc: queryDocumentSnapshots.getDocuments()){
-                        db = doc.getReference();
-
-                        db.get().addOnSuccessListener(
-                                documentSnapshot -> mySession = documentSnapshot.toObject(MySession.class)
-                        );
-
-                        mySession.recentlyJoined = recentllyJoined;
-                        mySession.connectedUsers++;
-
-                        db.set(mySession);
-                        db.addSnapshotListener((value, error) -> {
-                            if (value != null && value.exists()) {
-
-                                MySession sessionTmp = value.toObject(MySession.class);
-                                if(!sessionTmp.recentlyJoined){
-                                    mySession = value.toObject(MySession.class);
-                                    /*binding.textUser.setText(mySession.ownerName);
-                                    binding.textHour.setText(mySession.hour + "");
-                                    binding.textMinutes.setText(mySession.minute + "");
-                                    binding.textSeconds.setText(mySession.second + "");*/
-
-                                }
+                            documentSnapshot -> {
+                                mySession = documentSnapshot.toObject(MySession.class);
+                                mySession.recentlyJoined = true;
+                                mySession.connectedUsers++;
+                                db.set(mySession);
+                                db.addSnapshotListener((value, error) -> {
+                                    if (value != null && value.exists()) {
+                                        MySession sessionTmp = value.toObject(MySession.class);
+                                        if (!sessionTmp.recentlyJoined) {
+                                            mySession = value.toObject(MySession.class);
+                                        }
+                                    }
+                                });
                             }
-                        });
-
-                    }
+                    );
                 });
     }
 
@@ -236,33 +192,6 @@ public class SessionController implements PlayerChangeController {
         mySession.isPlaying = true;
         publishSession();
     }
-
-    /*public void play(){
-        if (mySession == null) return;
-        sessionThread = new Thread(() -> {
-            try {
-                mySession.isPlaying = true;
-
-                //While song currentTime does not surpass song length
-                while (mySession.isPlaying){
-                    Thread.sleep(1000);
-                    mySession.second++;
-                    if(mySession.second > 60){
-                        mySession.second = 0;
-                        mySession.minute++;
-                        if(mySession.minute > 60){
-                            mySession.minute = 0;
-                            mySession.hour++;
-                        }
-                    }
-                    System.out.println(mySession.hour + " : " + mySession.minute + " : " + mySession.second);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-        sessionThread.start();
-    }*/
 
     public void pause(boolean serverPauseSignal){
         /*if(sessionThread != null){
