@@ -4,7 +4,7 @@
 
   ![Logo](https://i.imgur.com/gnFJf40.png)
 
-  [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg?style=for-the-badge&logo=appveyor)] (https://opensource.org/licenses/)![](https://img.shields.io/twitter/follow/AppMusiquita?style=for-the-badge&logo=twitter&color=ff69b4)
+  [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg?style=for-the-badge&logo=appveyor)](https://opensource.org/licenses/) ![](https://img.shields.io/twitter/follow/AppMusiquita?style=for-the-badge&logo=twitter&color=ff69b4)
   
   # Musiquita App
 
